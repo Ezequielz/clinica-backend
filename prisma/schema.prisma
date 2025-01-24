@@ -1,0 +1,136 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+}
+
+enum Rol {
+  USER
+  ADMIN
+}
+
+model User {
+  id         String    @id @default(uuid())
+  nombre     String
+  apellido   String
+  dni        String?    @unique
+  fecha_nac  DateTime?
+  email      String    @unique
+  password   String
+  telefono   String?
+  direccion  String?
+  rol        Rol       @default(USER)// Enum para determinar si es PACIENTE o MEDICO
+  paciente   Paciente? // Relación opcional con Paciente
+  medico     Medico?   // Relación opcional con Medico
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model Paciente {
+  id_paciente    String           @id @default(uuid())
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String           @unique
+  obra_social    Boolean          @default(false)
+  Consulta       Consulta[]
+  TurnoReservado TurnoReservado[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+}
+
+model Medico {
+  id_medico      String           @id @default(uuid())
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String           @unique
+  sueldo         Float
+  especialidad   Servicio         @relation(fields: [especialidadId], references: [codigo_servicio], onDelete: Cascade)
+  especialidadId String
+  turnos         Turno[]
+  Consulta       Consulta[]
+  TurnoReservado TurnoReservado[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+}
+
+
+
+model Servicio {
+  id              String            @id @default(uuid())
+  codigo_servicio String            @unique
+  nombre          String
+  descripcion     String
+  precio          Float
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  PaqueteServicio PaqueteServicio[]
+  Consulta        Consulta[]
+  medicos         Medico[]          // Relación con médicos
+}
+
+model PaqueteServicio {
+  id         Int      @id @default(autoincrement())
+  paqueteId  String
+  servicioId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  paquete    Paquete  @relation(fields: [paqueteId], references: [codigo_paquete], onDelete: Cascade)
+  servicio   Servicio @relation(fields: [servicioId], references: [codigo_servicio])
+}
+
+model Paquete {
+  id                  String            @id @default(uuid())
+  codigo_paquete      String            @unique
+  nombre              String
+  precio_paquete      Float             @default(0)
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  servicios_incluidos PaqueteServicio[]
+  Consulta            Consulta[]
+}
+
+model Consulta {
+  id             String   @id @default(uuid())
+  fecha_consulta DateTime
+  hora_consulta  String
+  pacienteId     String
+  medicoId       String
+  servicioId     String?
+  paqueteId      String?
+  monto_total    Float
+  pagado_o_no    Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  paciente Paciente  @relation(fields: [pacienteId], references: [id_paciente], onDelete: Cascade)
+  medico   Medico    @relation(fields: [medicoId], references: [id_medico], onDelete: Cascade)
+  servicio Servicio? @relation(fields: [servicioId], references: [codigo_servicio], onDelete: Cascade)
+  paquete  Paquete?  @relation(fields: [paqueteId], references: [codigo_paquete], onDelete: Cascade)
+}
+
+model Turno {
+  id_turno       String           @id @default(cuid())
+  dia_semana     String
+  hora_inicio    String
+  hora_fin       String
+  medicoId       String
+  TurnoReservado TurnoReservado[]
+
+  medico Medico @relation(fields: [medicoId], references: [id_medico], onDelete: Cascade)
+}
+
+model TurnoReservado {
+  id_reserva  String   @id @default(cuid())
+  fecha_turno DateTime
+  hora_turno  String
+  medicoId    String
+  pacienteId  String
+  turnoId     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  medico   Medico   @relation(fields: [medicoId], references: [id_medico], onDelete: Cascade)
+  paciente Paciente @relation(fields: [pacienteId], references: [id_paciente], onDelete: Cascade)
+  turno    Turno    @relation(fields: [turnoId], references: [id_turno], onDelete: Cascade)
+}
