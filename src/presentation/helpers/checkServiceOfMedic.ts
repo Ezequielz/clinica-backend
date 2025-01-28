@@ -1,28 +1,22 @@
 import prisma from '../../lib/prisma';
 import { CustomError } from './custom.error';
 
-export const checkExistCodigo_servicio = async (codigo_servicio: string) => {
+export const checkServiceOfMedic = async (medicId: string, codigo_servicio: string) => {
     if (!codigo_servicio) throw CustomError.badRequest('codigo_servicio is required');
 
     try {
-        const servicio = await prisma.servicio.findFirst({
+        const medic = await prisma.medico.findFirst({
             where: {
-                codigo_servicio: {
+                id_medico: medicId,
+                especialidadId: {
                     equals: codigo_servicio,
                     mode: "insensitive",
                 },
             },
-            include: {
-                medicos: {
-                    select: {
-                        id_medico: true
-                    }
-                }
-            }
         });
 
        
-        if (!servicio) {
+        if (!medic) {
             return {
                 ok: false,
             };
@@ -30,10 +24,10 @@ export const checkExistCodigo_servicio = async (codigo_servicio: string) => {
 
         return {
             ok: true,
-            servicio
+            medic
         }
     } catch (error) {
-        throw CustomError.internalServer('Error al comprobar el codigo de servicio');
+        throw CustomError.internalServer('Error al comprobar el médico');
     }
 
 };

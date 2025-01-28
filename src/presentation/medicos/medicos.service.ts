@@ -7,8 +7,8 @@ import type { MedicoDTO, MedicoUpdateDTO } from '../../domain/dtos/medico/medico
 
 const createMedico = async (medicoDTO: MedicoDTO) => {
 
-    const isValidEspecialidadId = await checkExistCodigo_servicio(medicoDTO.especialidadId);
-    if (!isValidEspecialidadId) throw CustomError.badRequest('Invalid especialidadId');
+    const {ok} = await checkExistCodigo_servicio(medicoDTO.especialidadId);
+    if (!ok) throw CustomError.badRequest('Invalid especialidadId');
     // creacion del medico
     const { medico } = await readMedicoById(medicoDTO.userId);
     if (medico) throw CustomError.badRequest(`el usuario ya está registrado como médico, medico_id: ${medico.id_medico}`);
@@ -76,6 +76,22 @@ const readMedicoById = async (id?: string) => {
 
                 ]
             },
+            omit:{
+                createdAt: true,
+                updatedAt: true
+            },
+            include: {
+                especialidad:{
+                    select: {
+                        nombre: true
+                    }
+                },
+                turnos: {
+                    omit: {
+                        medicoId: true
+                    }
+                }
+            }
 
         });
         return {

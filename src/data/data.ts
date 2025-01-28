@@ -12,9 +12,6 @@ interface TurnoSeed {
   hora_fin: string;
 }
 
-interface PacienteSeed {
-  obra_social: boolean;
-}
 
 interface ServicioSeed {
   codigo_servicio: string;
@@ -42,7 +39,6 @@ enum RolSeed {
 
 interface InitialSeed {
   users: UsersSeed[];
-  pacientes: PacienteSeed[];
   medicos: MedicoSeed[];
   servicios: ServicioSeed[];
 }
@@ -56,7 +52,7 @@ export const seed: InitialSeed = {
       dni: "1223456789",
       fecha_nac: new Date("1990-01-01"),
       email: "juan.perez@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "123456789",
       direccion: "Calle Falsa 123",
       rol: RolSeed.USER
@@ -68,7 +64,7 @@ export const seed: InitialSeed = {
       dni: "872654321",
       fecha_nac: new Date("1985-02-02"),
       email: "ana.gomez@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "987654321",
       direccion: "Calle Verdadera 456",
       rol: RolSeed.ADMIN
@@ -80,7 +76,7 @@ export const seed: InitialSeed = {
       dni: "112223344",
       fecha_nac: new Date("1992-03-03"),
       email: "luis.martinez@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "456789123",
       direccion: "Calle Falsa 789",
       rol: RolSeed.ADMIN
@@ -92,7 +88,7 @@ export const seed: InitialSeed = {
       dni: "44332211",
       fecha_nac: new Date("1988-04-04"),
       email: "maria.lopez@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "321654987",
       direccion: "Calle Auténtica 321",
       rol: RolSeed.ADMIN
@@ -104,7 +100,7 @@ export const seed: InitialSeed = {
       dni: "667788299",
       fecha_nac: new Date("1995-05-05"),
       email: "pedro.garcia@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "654987321",
       direccion: "Calle Secundaria 654",
       rol: RolSeed.ADMIN
@@ -116,7 +112,7 @@ export const seed: InitialSeed = {
       dni: "99887766",
       fecha_nac: new Date("2000-06-06"),
       email: "sofia.hernandez@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "789321654",
       direccion: "Calle Principal 987",
       rol: RolSeed.USER
@@ -130,7 +126,7 @@ export const seed: InitialSeed = {
       dni: "55443322",
       fecha_nac: new Date("1980-07-07"),
       email: "carlos.rodriguez@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "987123654",
       direccion: "Calle Médica 111",
       rol: RolSeed.USER
@@ -142,7 +138,7 @@ export const seed: InitialSeed = {
       dni: "22113344",
       fecha_nac: new Date("1983-08-08"),
       email: "laura.fernandez@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "654321987",
       direccion: "Calle Salud 222",
       rol: RolSeed.USER
@@ -154,7 +150,7 @@ export const seed: InitialSeed = {
       dni: "33221144",
       fecha_nac: new Date("1975-09-09"),
       email: "jorge.gutierrez@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "321987654",
       direccion: "Calle Clínica 333",
       rol: RolSeed.USER
@@ -166,7 +162,7 @@ export const seed: InitialSeed = {
       dni: "665542433",
       fecha_nac: new Date("1990-10-10"),
       email: "elena.castro1@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "987654123",
       direccion: "Calle Hospital 444",
       rol: RolSeed.USER
@@ -177,7 +173,7 @@ export const seed: InitialSeed = {
       dni: "626554433",
       fecha_nac: new Date("1990-10-10"),
       email: "elena.castro2@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "987654123",
       direccion: "Calle Hospital 444",
       rol: RolSeed.USER
@@ -188,7 +184,7 @@ export const seed: InitialSeed = {
       dni: "1224345678",
       fecha_nac: new Date("1980-01-01"),
       email: "carlos.ramirez@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "123456789",
       direccion: "Calle Principal 123",
       rol: RolSeed.USER,
@@ -199,7 +195,7 @@ export const seed: InitialSeed = {
       dni: "234546789",
       fecha_nac: new Date("1985-02-02"),
       email: "laura.gomez@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "234567890",
       direccion: "Calle Secundaria 234",
       rol: RolSeed.USER,
@@ -210,7 +206,7 @@ export const seed: InitialSeed = {
       dni: "345675890",
       fecha_nac: new Date("1975-03-03"),
       email: "jorge.perez@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "345678901",
       direccion: "Calle Tercera 345",
       rol: RolSeed.USER,
@@ -221,7 +217,7 @@ export const seed: InitialSeed = {
       dni: "456782901",
       fecha_nac: new Date("1990-04-04"),
       email: "ana.lopez@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "456789012",
       direccion: "Calle Cuarta 456",
       rol: RolSeed.USER,
@@ -232,7 +228,7 @@ export const seed: InitialSeed = {
       dni: "567890212",
       fecha_nac: new Date("1982-05-05"),
       email: "luis.hernandez@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "567890123",
       direccion: "Calle Quinta 567",
       rol: RolSeed.USER,
@@ -243,7 +239,7 @@ export const seed: InitialSeed = {
       dni: "66554433",
       fecha_nac: new Date("1990-10-10"),
       email: "elena.castro@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "987654123",
       direccion: "Calle Hospital 444",
       rol: RolSeed.USER,
@@ -254,7 +250,7 @@ export const seed: InitialSeed = {
       dni: "678290123",
       fecha_nac: new Date("1993-06-06"),
       email: "maria.garcia@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "678901234",
       direccion: "Calle Sexta 678",
       rol: RolSeed.USER,
@@ -265,7 +261,7 @@ export const seed: InitialSeed = {
       dni: "789012234",
       fecha_nac: new Date("1987-07-07"),
       email: "pedro.martinez@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "789012345",
       direccion: "Calle Séptima 789",
       rol: RolSeed.USER,
@@ -276,7 +272,7 @@ export const seed: InitialSeed = {
       dni: "890123452",
       fecha_nac: new Date("1995-08-08"),
       email: "sofia.rodriguez@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "890123456",
       direccion: "Calle Octava 890",
       rol: RolSeed.USER,
@@ -287,7 +283,7 @@ export const seed: InitialSeed = {
       dni: "901243456",
       fecha_nac: new Date("1988-09-09"),
       email: "fernando.diaz@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "901234567",
       direccion: "Calle Novena 901",
       rol: RolSeed.USER,
@@ -298,7 +294,7 @@ export const seed: InitialSeed = {
       dni: "12345679",
       fecha_nac: new Date("1981-10-10"),
       email: "clara.fernandez@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "112233445",
       direccion: "Calle Décima 112",
       rol: RolSeed.USER,
@@ -309,7 +305,7 @@ export const seed: InitialSeed = {
       dni: "23456780",
       fecha_nac: new Date("1983-11-11"),
       email: "ricardo.vargas@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "223344556",
       direccion: "Calle Central 223",
       rol: RolSeed.USER,
@@ -320,7 +316,7 @@ export const seed: InitialSeed = {
       dni: "34567891",
       fecha_nac: new Date("1994-12-12"),
       email: "isabel.morales@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "334455667",
       direccion: "Calle Norte 334",
       rol: RolSeed.USER,
@@ -331,7 +327,7 @@ export const seed: InitialSeed = {
       dni: "45678902",
       fecha_nac: new Date("1992-01-13"),
       email: "adrian.paredes@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "445566778",
       direccion: "Calle Sur 445",
       rol: RolSeed.USER,
@@ -342,7 +338,7 @@ export const seed: InitialSeed = {
       dni: "56789013",
       fecha_nac: new Date("1989-02-14"),
       email: "camila.nunez@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "556677889",
       direccion: "Calle Este 556",
       rol: RolSeed.USER,
@@ -353,7 +349,7 @@ export const seed: InitialSeed = {
       dni: "67890124",
       fecha_nac: new Date("1991-03-15"),
       email: "andres.guzman@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "667788990",
       direccion: "Calle Oeste 667",
       rol: RolSeed.USER,
@@ -364,7 +360,7 @@ export const seed: InitialSeed = {
       dni: "78901235",
       fecha_nac: new Date("1986-04-16"),
       email: "victoria.mendoza@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "778899001",
       direccion: "Calle Avenida 778",
       rol: RolSeed.USER,
@@ -375,7 +371,7 @@ export const seed: InitialSeed = {
       dni: "89012346",
       fecha_nac: new Date("1984-05-17"),
       email: "daniel.rojas@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "889900112",
       direccion: "Calle Boulevard 889",
       rol: RolSeed.USER,
@@ -386,7 +382,7 @@ export const seed: InitialSeed = {
       dni: "90123457",
       fecha_nac: new Date("1987-06-18"),
       email: "patricia.cruz@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "990011223",
       direccion: "Calle Nueva 990",
       rol: RolSeed.USER,
@@ -397,41 +393,13 @@ export const seed: InitialSeed = {
       dni: "121223344",
       fecha_nac: new Date("1990-07-19"),
       email: "hugo.navarro@example.com",
-      password: bcryptAdapter.hash( "password123"),
+      password: bcryptAdapter.hash("password123"),
       telefono: "110022334",
       direccion: "Calle Antigua 110",
       rol: RolSeed.USER,
     },
 
   ],
-
-
-  pacientes: [
-    {
-      obra_social: true
-    },
-    {
-      obra_social: false
-    },
-
-    {
-      obra_social: true
-    },
-
-    {
-      obra_social: false
-    },
-
-    {
-      obra_social: true
-    },
-
-    {
-      obra_social: false
-    },
-
-  ],
-
   medicos: [
     {
       sueldo: 50000,
@@ -477,7 +445,7 @@ export const seed: InitialSeed = {
       especialidadId: "5",
       turnos: [
         { dia_semana: "Viernes", hora_inicio: "10:00", hora_fin: "15:00" },
-   
+
       ],
     },
     {
@@ -485,7 +453,7 @@ export const seed: InitialSeed = {
       especialidadId: "10",
       turnos: [
         { dia_semana: "Viernes", hora_inicio: "10:00", hora_fin: "15:00" },
-   
+
       ],
     },
     {
@@ -495,7 +463,7 @@ export const seed: InitialSeed = {
         { dia_semana: "Lunes", hora_inicio: "8:00", hora_fin: "15:00" },
         { dia_semana: "Martes", hora_inicio: "8:00", hora_fin: "12:00" },
         { dia_semana: "Viernes", hora_inicio: "8:00", hora_fin: "14:00" },
-   
+
       ],
     },
     {
@@ -505,7 +473,7 @@ export const seed: InitialSeed = {
         { dia_semana: "Lunes", hora_inicio: "8:00", hora_fin: "15:00" },
         { dia_semana: "Martes", hora_inicio: "8:00", hora_fin: "12:00" },
         { dia_semana: "Viernes", hora_inicio: "8:00", hora_fin: "14:00" },
-   
+
       ],
     },
     {
@@ -513,7 +481,7 @@ export const seed: InitialSeed = {
       especialidadId: "7",
       turnos: [
         { dia_semana: "Miércoles", hora_inicio: "8:00", hora_fin: "12:00" },
-        { dia_semana: "Jueves", hora_inicio: "8:00", hora_fin: "16:00" },  
+        { dia_semana: "Jueves", hora_inicio: "8:00", hora_fin: "16:00" },
       ],
     },
     {
@@ -521,7 +489,7 @@ export const seed: InitialSeed = {
       especialidadId: "8",
       turnos: [
         { dia_semana: "Miércoles", hora_inicio: "12:00", hora_fin: "18:00" },
-        { dia_semana: "Viernes", hora_inicio: "8:00", hora_fin: "12:00" },  
+        { dia_semana: "Viernes", hora_inicio: "8:00", hora_fin: "12:00" },
       ],
     },
     {
@@ -529,7 +497,7 @@ export const seed: InitialSeed = {
       especialidadId: "5",
       turnos: [
         { dia_semana: "Miércoles", hora_inicio: "12:00", hora_fin: "18:00" },
-        { dia_semana: "Viernes", hora_inicio: "8:00", hora_fin: "12:00" },  
+        { dia_semana: "Viernes", hora_inicio: "8:00", hora_fin: "12:00" },
       ],
     },
     {
@@ -537,7 +505,7 @@ export const seed: InitialSeed = {
       especialidadId: "8",
       turnos: [
         { dia_semana: "Miércoles", hora_inicio: "12:00", hora_fin: "18:00" },
-        { dia_semana: "Viernes", hora_inicio: "8:00", hora_fin: "12:00" },  
+        { dia_semana: "Viernes", hora_inicio: "8:00", hora_fin: "12:00" },
       ],
     },
     {

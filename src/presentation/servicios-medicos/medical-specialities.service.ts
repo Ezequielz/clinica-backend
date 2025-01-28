@@ -8,8 +8,8 @@ import type { MedicalSpecialityUpdateDTO,  MedicalSpecialityDTO } from '../../do
 const createMedicalSpeciality = async ( medicalSpecialityDTO: MedicalSpecialityDTO) => {
 
 
-    const existCode = await checkExistCodigo_servicio(medicalSpecialityDTO.codigo_servicio);
-    if (existCode) throw CustomError.badRequest('codigo_servicio inválido, ya existe ese codigo_servicio para otro servicio');
+    const {ok, servicio} = await checkExistCodigo_servicio(medicalSpecialityDTO.codigo_servicio);
+    if (ok && servicio) throw CustomError.badRequest('codigo_servicio inválido, ya existe ese codigo_servicio para otro servicio');
 
     try {
 
@@ -43,10 +43,21 @@ const readMedicalSpecialities = async (id?: string) => {
             where: {
                 codigo_servicio: id
             },
-            omit: {
-                createdAt: true,
-                updatedAt: true
+            include: {
+                Consulta: true,
+                medicos: {
+                    include:{
+                        turnos: true
+                    },
+
+                 
+                }
+            },
+            omit:{
+                updatedAt:true,
+                createdAt: true
             }
+            
         });
 
         return {

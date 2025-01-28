@@ -2,21 +2,13 @@ import { Request, Response } from 'express';
 
 import { handleError } from '../helpers/handleError';
 import { MedicalSpecialitiesService } from './medical-specialities.service';
-import { medicalSpecialityDto, type MedicalSpecialityUpdateDTO, type MedicalSpecialityDTO } from '../../domain/dtos/servicios-medicos/medical-speciality.dto';
+import { medicalSpecialityDto, type MedicalSpecialityUpdateDTO } from '../../domain/dtos/servicios-medicos/medical-speciality.dto';
 
 const createMedicalSpeciality = (req: Request, res: Response) => {
 
-    const { codigo_servicio, nombre, descripcion, precio } = req.body;
+    const body = req.body;
 
-    const newMedicalSpeciality: MedicalSpecialityDTO = {
-        codigo_servicio,
-        nombre,
-        descripcion,
-        precio
-    };
-
-
-    const [error, medicalSpeciality] = medicalSpecialityDto.create({ medicalSpecialityData: newMedicalSpeciality });
+    const [error, medicalSpeciality] = medicalSpecialityDto.create({ medicalSpecialityData: {...body} });
     if (error) {
         res.status(400).json({ ok: false, error });
         return;
