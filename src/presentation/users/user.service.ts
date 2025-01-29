@@ -10,6 +10,8 @@ const readUsers = async () => {
       {
         omit: {
           password: true,
+          createdAt: true,
+          updatedAt: true,
         },
       }
     );

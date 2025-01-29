@@ -16,9 +16,10 @@ export const AuthRoutes = (): Router => {
     // rutas 
 
     const {
-        validateJWT
+        validateJWT,
+        login,
+        register,
     } = AuthMiddleware;
-
 
     /**
  * @swagger
@@ -32,7 +33,7 @@ export const AuthRoutes = (): Router => {
 *       - Auth
 *     description: login de usuario
 */
-    router.post('/register', registerUser);
+    router.post('/register', [register], registerUser);
 
     /**
 * @swagger
@@ -42,7 +43,7 @@ export const AuthRoutes = (): Router => {
 *       - Auth
 *     description: login de usuario
 */
-    router.post('/login', loginUser);
+    router.post('/login', [login] , loginUser);
 
 
 
