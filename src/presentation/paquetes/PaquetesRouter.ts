@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { PaquetesController } from './PaquetesController';
+import { AuthMiddleware } from '../middlewares/auth.middleware';
 
 
 export const PaquetesRoutes = (): Router => {
@@ -13,16 +14,20 @@ export const PaquetesRoutes = (): Router => {
         deletePaquete,
     } = PaquetesController;
 
+    const {
+        validateJWT,
+        validateAdmin
+    } = AuthMiddleware;
     // /api/paquetes
     // Ruta para obtener todos los paquetes
 
     router.get('/', readPaquetes);
     router.get('/:code', readPaquetesByCode);
     
-    router.post('/', createPaquete);
+    router.post('/', [validateJWT, validateAdmin], createPaquete);
 
-    router.patch('/:id', updatePaquete);
-    router.delete('/:code', deletePaquete);
+    router.patch('/:id', [validateJWT, validateAdmin], updatePaquete);
+    router.delete('/:code', [validateJWT, validateAdmin],deletePaquete);
 
 
     return router;

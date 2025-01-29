@@ -1,14 +1,23 @@
 import { Router } from 'express';
 import { AuthController } from './AuthController';
+import { AuthMiddleware } from '../middlewares/auth.middleware';
 
 
 export const AuthRoutes = (): Router => {
     const router = Router();
 
-    const { loginUser, registerUser } = AuthController;
+    const {
+        loginUser,
+        registerUser,
+        renewToken,
+    } = AuthController;
 
     // /api/auth
     // rutas 
+
+    const {
+        validateJWT
+    } = AuthMiddleware;
 
 
     /**
@@ -34,6 +43,10 @@ export const AuthRoutes = (): Router => {
 *     description: login de usuario
 */
     router.post('/login', loginUser);
+
+
+
+    router.get('/renew', [validateJWT], renewToken);
 
     return router;
 };

@@ -8,7 +8,9 @@ import { MedicosRoutes } from './medicos/MedicosRouter';
 import { MedicalSpecialitiesRoutes } from './servicios-medicos/MedicalSpecialitiesRoutes';
 import { PaquetesRoutes } from './paquetes/PaquetesRouter';
 import { ConsultasRoutes } from './consultas/ConsultasRouter';
+import { AuthMiddleware } from './middlewares/auth.middleware';
 
+const { validateJWT } = AuthMiddleware;
 
 const router = Router();
 
@@ -17,17 +19,17 @@ const router = Router();
 
 router.use('/auth', AuthRoutes());
 
-router.use('/users', UsersRoutes());
-
-router.use('/pacientes', PacientesRoutes());
-
-router.use('/medicos', MedicosRoutes());
-
 router.use('/medical-services', MedicalSpecialitiesRoutes());
 
 router.use('/paquetes', PaquetesRoutes());
 
-router.use('/consultas', ConsultasRoutes());
+router.use('/users', [validateJWT], UsersRoutes());
+
+router.use('/pacientes', [validateJWT], PacientesRoutes());
+
+router.use('/medicos', [validateJWT], MedicosRoutes());
+
+router.use('/consultas',[validateJWT], ConsultasRoutes());
 
 
 

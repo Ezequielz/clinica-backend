@@ -1,13 +1,14 @@
 import prisma from '../../lib/prisma';
-import { CustomError } from '../helpers/custom.error';
-
+import { JwtAdapter } from '../../config/jwt.adapter';
 import { bcryptAdapter } from '../../config/bcrypt.adapter';
 
-import { LoginUserDTO } from '../../domain/dtos/auth/loginUser.dto';
-import { UserDTO } from '../../domain/dtos/auth/user.dto';
-import { JwtAdapter } from '../../config/jwt.adapter';
+import { CustomError } from '../helpers/custom.error';
+
+import { type LoginUserDTO } from '../../domain/dtos/auth/loginUser.dto';
+import { type UserDTO } from '../../domain/dtos/auth/user.dto';
 
 import { pacienteDto } from '../../domain/dtos/paciente/paciente.dto';
+import { type TokenDTO } from '../../domain/dtos/auth/token.dto';
 
 
 
@@ -27,15 +28,18 @@ const registerUser = async (registerUserDto: UserDTO) => {
 
 
     const [error, paciente] = pacienteDto.create({ pacienteData: { userId: newUser.id } })
-    if (error) throw CustomError.badRequest('Erro al crear paciente');
+    if (error) throw CustomError.badRequest('Error al crear paciente');
 
     await prisma.paciente.create({
       data: paciente!
     });
 
+    const token = await JwtAdapter.generateToken({ id: newUser.id, email: newUser.email });
+    if (!token) throw CustomError.internalServer('Error while creating JWT');
+
     return {
       user: newUser,
-      token: 'ABC'
+      token
     };
 
   } catch (error) {
@@ -43,8 +47,6 @@ const registerUser = async (registerUserDto: UserDTO) => {
   };
 
 };
-
-
 const loginUser = async (loginUserDTO: LoginUserDTO) => {
 
 
@@ -71,11 +73,20 @@ const loginUser = async (loginUserDTO: LoginUserDTO) => {
 
 
 };
+const renewToken = async (tokenDTO: TokenDTO) => {
 
+  const token = await JwtAdapter.generateToken({ id: tokenDTO.id, email: tokenDTO.email });
+  if (!token) throw CustomError.internalServer('No se pudo renovar el token');
 
+  return {
+    ok: true,
+    token
+  };
+};
 
 export const AuthService = {
   // Methods
   registerUser,
   loginUser,
+  renewToken,
 };

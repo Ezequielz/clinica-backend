@@ -13,6 +13,8 @@ export const PacientesRoutes = (): Router => {
         updatePaciente,
        
     } = PacientesController;
+
+    
     /**
        * @swagger
        * /users/paciente:

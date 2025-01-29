@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { handleError } from '../helpers/handleError';
 import { loginUserDto } from '../../domain/dtos/auth/loginUser.dto';
 import { userDto } from '../../domain/dtos/auth/user.dto';
+import { tokenDto } from '../../domain/dtos/auth/token.dto';
 
 const registerUser = (req: Request, res: Response) => {
 
@@ -35,14 +36,39 @@ const loginUser = (req: Request, res: Response) => {
 
     AuthService.loginUser(user!)
         .then((user) => {
-            res.json(user)})
+            res.json(user)
+        })
         .catch((error) => {
-            console.log({'error': error})
-            handleError(error, res)});
+            console.log({ 'error': error })
+            handleError(error, res)
+        });
 
 };
+
+
+const renewToken = async (req: Request, res: Response) => {
+
+    const { user } = req.body
+
+    const tokenData = {
+        id: user.id,
+        email: user.email
+    };
+    const [error, token ] = tokenDto.validate({ tokenData });
+    // // Generar JWT
+    // const token = await generarJWT( uid, name );
+    AuthService.renewToken(token!)
+    .then((user) => {
+        res.json(user)
+    })
+    .catch((error) => {
+        console.log({ 'error': error })
+        handleError(error, res)
+    });
+}
 
 export const AuthController = {
     registerUser,
     loginUser,
+    renewToken,
 };

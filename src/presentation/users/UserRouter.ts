@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { UsersController } from './UsersController';
+import { AuthMiddleware } from '../middlewares/auth.middleware';
 
 export const UsersRoutes = (): Router => {
     const router = Router();
@@ -12,6 +13,9 @@ export const UsersRoutes = (): Router => {
         deleteUser,
     } = UsersController;
 
+    const {
+        validateAdmin
+    } = AuthMiddleware;
     // /api/users
     // Ruta para obtener todos los usuarios
 
@@ -64,8 +68,8 @@ export const UsersRoutes = (): Router => {
     router.get('/:id', readUserById);
 
 
-    router.patch('/:id', updateUser);
-    router.delete('/:id', deleteUser);
+    router.patch('/:id',updateUser);
+    router.delete('/:id', [validateAdmin], deleteUser);
 
 
     return router;
