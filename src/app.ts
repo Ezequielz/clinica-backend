@@ -35,16 +35,19 @@ function main() {
     // Ruta para acceder a la documentación de la API
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
     app.use(cors())
-    app.use( express.json() ); // raw
-    app.use( express.urlencoded({ extended: true }) ); // x-www-form-urlencoded
+    app.use(express.json()); // raw
+    app.use(express.urlencoded({ extended: true })); // x-www-form-urlencoded
 
     const server = createServer(app);
 
     app.use('/api', AppRoutes);
 
     server.listen(envs.PORT, () => {
-        console.log('Server is running on port http://localhost:3000');
-        console.log('Swagger docs available at http://localhost:3000/api-docs');
+        console.log(`Server is running on port ${envs.PORT}`);
+        if (process.env.NODE_ENV === 'development') {
+            console.log(`Server is running on port http://localhost:3000`);
+            console.log(`Swagger docs available at http://localhost:3000/api-docs`);
+        }
     });
 }
 
