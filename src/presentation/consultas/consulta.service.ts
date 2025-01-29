@@ -10,6 +10,7 @@ import { ConsultasPackDTO } from '../../domain/dtos/consulta/consultasPack.dto';
 import type { ConsultaUpdateDTO, ConsultaDTO } from '../../domain/dtos/consulta/consulta.dto';
 import { checkExistConsulta } from '../helpers/checkExistConsulta';
 import { checkServiceOfMedic } from '../helpers/checkServiceOfMedic';
+import { GananciasDTO } from '../../domain/dtos/consulta/ganancia.dto';
 
 const createConsulta = async (consultaDTO: ConsultaDTO) => {
 
@@ -272,6 +273,63 @@ const readConsultaById = async (id: string) => {
     }
 
 };
+const readGanancias = async (gananciasDTO: GananciasDTO) => {
+
+    const { fecha_inicio, fecha_fin, typo } = gananciasDTO;
+    try {
+        const where: any = {};
+
+        if (fecha_inicio && fecha_fin) {
+            where.updatedAt = {
+                gte: new Date(fecha_inicio),
+                lte: new Date(fecha_fin),
+            };
+        } else if (fecha_inicio) {
+            const startDate = new Date(fecha_inicio);
+            const endDate = new Date(fecha_inicio);
+            endDate.setHours(23, 59, 59, 999); // Asegura incluir todo el día
+
+            where.updatedAt = {
+                gte: startDate,
+                lte: endDate,
+            };
+
+            
+        }
+
+        where.pagado = true
+
+        if (typo === "pack") {
+            where.paqueteId = { not: null };
+        } else if (typo === "servicio") {
+            where.paqueteId = null;
+        }
+
+        const consultas = await prisma.consulta.findMany({
+            where,
+            select: {
+                monto_total: true,
+            },
+        });
+
+        const totalGanancias = consultas.reduce((acc, consulta) => acc + consulta.monto_total, 0);
+
+        return {
+            ok: true,
+            ganancias: totalGanancias,
+        };
+    } catch (error) {
+        console.log(error);
+
+        return {
+            ok: false,
+            msg: "Error al obtener las ganancias de consultas",
+        };
+    }
+};
+
+
+
 
 const updateConsulta = async (consultaDTO: ConsultaUpdateDTO) => {
     const { id, fecha_consulta, hora_consulta, medicoId, pagado } = consultaDTO;
@@ -400,6 +458,7 @@ export const ConsultasService = {
     createConsultasByPack,
     readConsultas,
     readConsultaById,
+    readGanancias,
     updateConsulta,
     deleteConsulta,
 

@@ -151,6 +151,7 @@ const login = (req: Request, res: Response, next: NextFunction): void => {
 
     if (error) {
         res.status(400).json({ ok: false, msg: error.message })
+        return;
     }
     req.body = value;
 
@@ -165,7 +166,7 @@ const register = (req: Request, res: Response, next: NextFunction): void => {
             .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
         password: Joi.string()
             .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).min(6).required(),
-        rol: Joi.string().valid(Rol.ADMIN, Rol.USER).optional(),
+    
         dni: Joi.string().optional(),
         fecha_nac: Joi.string().optional(),
         telefono: Joi.string().optional(),
@@ -177,6 +178,7 @@ const register = (req: Request, res: Response, next: NextFunction): void => {
 
     if (error) {
         res.status(400).json({ ok: false, msg: error.message })
+        return;
     }
     req.body = value;
 
