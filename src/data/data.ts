@@ -37,6 +37,8 @@ enum RolSeed {
   ADMIN = "ADMIN",
 }
 
+
+
 interface InitialSeed {
   users: UsersSeed[];
   medicos: MedicoSeed[];
@@ -398,12 +400,130 @@ export const seed: InitialSeed = {
       direccion: "Calle Antigua 110",
       rol: RolSeed.USER,
     },
+    {
+      nombre: "María",
+      apellido: "Fernández",
+      dni: "221334455",
+      fecha_nac: new Date("1985-03-22"),
+      email: "mariafernandez@example.com",
+      password: bcryptAdapter.hash("password123"),
+      telefono: "115566778",
+      direccion: "Avenida Central 200",
+      rol: RolSeed.USER,
+    },
+    {
+      nombre: "Carlos",
+      apellido: "Gómez",
+      dni: "334455667",
+      fecha_nac: new Date("1992-09-10"),
+      email: "carlosgomez@example.com",
+      password: bcryptAdapter.hash("password123"),
+      telefono: "112233445",
+      direccion: "Calle del Sol 50",
+      rol: RolSeed.USER,
+    },
+    {
+      nombre: "Laura",
+      apellido: "Pérez",
+      dni: "445566778",
+      fecha_nac: new Date("1998-05-14"),
+      email: "lauraperez@example.com",
+      password: bcryptAdapter.hash("password123"),
+      telefono: "119988776",
+      direccion: "Pasaje Estrella 7",
+      rol: RolSeed.USER,
+    },
+    {
+      nombre: "Javier",
+      apellido: "López",
+      dni: "556677889",
+      fecha_nac: new Date("1980-12-01"),
+      email: "javierlopez@example.com",
+      password: bcryptAdapter.hash("password123"),
+      telefono: "116677889",
+      direccion: "Boulevard Norte 350",
+      rol: RolSeed.USER,
+    },
+    {
+      nombre: "Ana",
+      apellido: "Rodríguez",
+      dni: "667788990",
+      fecha_nac: new Date("1995-06-30"),
+      email: "anarodriguez@example.com",
+      password: bcryptAdapter.hash("password123"),
+      telefono: "117766554",
+      direccion: "Calle del Río 120",
+      rol: RolSeed.USER,
+    },
+    {
+      nombre: "Martín",
+      apellido: "Díaz",
+      dni: "778899001",
+      fecha_nac: new Date("1987-04-05"),
+      email: "martindiaz@example.com",
+      password: bcryptAdapter.hash("password123"),
+      telefono: "118855663",
+      direccion: "Avenida Libertad 75",
+      rol: RolSeed.USER,
+    },
+    {
+      nombre: "Sofía",
+      apellido: "García",
+      dni: "889900112",
+      fecha_nac: new Date("1991-11-15"),
+      email: "sofiagarcia@example.com",
+      password: bcryptAdapter.hash("password123"),
+      telefono: "113344556",
+      direccion: "Paseo de los Olivos 10",
+      rol: RolSeed.USER,
+    },
+    {
+      nombre: "Fernando",
+      apellido: "Torres",
+      dni: "990011223",
+      fecha_nac: new Date("1983-02-08"),
+      email: "fernandotorres@example.com",
+      password: bcryptAdapter.hash("password123"),
+      telefono: "114477889",
+      direccion: "Calle 5 de Mayo 99",
+      rol: RolSeed.USER,
+    },
+    {
+      nombre: "Camila",
+      apellido: "Méndez",
+      dni: "100112233",
+      fecha_nac: new Date("1996-08-25"),
+      email: "camilamendez@example.com",
+      password: bcryptAdapter.hash("password123"),
+      telefono: "115599667",
+      direccion: "Avenida de la Paz 180",
+      rol: RolSeed.USER,
+    },
+    {
+      nombre: "Lucas",
+      apellido: "Ramírez",
+      dni: "110223344",
+      fecha_nac: new Date("1989-01-12"),
+      email: "lucasramirez@example.com",
+      password: bcryptAdapter.hash("password123"),
+      telefono: "112211334",
+      direccion: "Calle Primavera 55",
+      rol: RolSeed.USER,
+    },
 
   ],
   medicos: [
     {
       sueldo: 50000,
       especialidadId: "1",
+      turnos: [
+        { dia_semana: "Lunes", hora_inicio: "08:00", hora_fin: "12:00" },
+        { dia_semana: "Miércoles", hora_inicio: "08:00", hora_fin: "12:00" },
+      ],
+    },
+    {
+      sueldo: 50000,
+      especialidadId: "16",
       turnos: [
         { dia_semana: "Lunes", hora_inicio: "08:00", hora_fin: "12:00" },
         { dia_semana: "Miércoles", hora_inicio: "08:00", hora_fin: "12:00" },
@@ -422,6 +542,13 @@ export const seed: InitialSeed = {
       especialidadId: "3",
       turnos: [
         { dia_semana: "Viernes", hora_inicio: "10:00", hora_fin: "14:00" },
+      ],
+    },
+    {
+      sueldo: 55000,
+      especialidadId: "15",
+      turnos: [
+        { dia_semana: "Lunes", hora_inicio: "10:00", hora_fin: "14:00" },
       ],
     },
     {
@@ -450,9 +577,25 @@ export const seed: InitialSeed = {
     },
     {
       sueldo: 42000,
+      especialidadId: "14",
+      turnos: [
+        { dia_semana: "Martes", hora_inicio: "8:00", hora_fin: "12:00" },
+
+      ],
+    },
+    {
+      sueldo: 42000,
       especialidadId: "10",
       turnos: [
         { dia_semana: "Viernes", hora_inicio: "10:00", hora_fin: "15:00" },
+
+      ],
+    },
+    {
+      sueldo: 42000,
+      especialidadId: "13",
+      turnos: [
+        { dia_semana: "Viernes", hora_inicio: "8:00", hora_fin: "12:00" },
 
       ],
     },
@@ -477,6 +620,16 @@ export const seed: InitialSeed = {
       ],
     },
     {
+      sueldo: 72000,
+      especialidadId: "17",
+      turnos: [
+        { dia_semana: "Lunes", hora_inicio: "8:00", hora_fin: "15:00" },
+        { dia_semana: "Martes", hora_inicio: "8:00", hora_fin: "12:00" },
+        { dia_semana: "Viernes", hora_inicio: "8:00", hora_fin: "14:00" },
+
+      ],
+    },
+    {
       sueldo: 53000,
       especialidadId: "7",
       turnos: [
@@ -485,10 +638,26 @@ export const seed: InitialSeed = {
       ],
     },
     {
+      sueldo: 53000,
+      especialidadId: "12",
+      turnos: [
+        { dia_semana: "Miércoles", hora_inicio: "10:00", hora_fin: "14:00" },
+        { dia_semana: "Viernes", hora_inicio: "9:00", hora_fin: "12:00" },
+      ],
+    },
+    {
       sueldo: 57000,
       especialidadId: "8",
       turnos: [
         { dia_semana: "Miércoles", hora_inicio: "12:00", hora_fin: "18:00" },
+        { dia_semana: "Viernes", hora_inicio: "8:00", hora_fin: "12:00" },
+      ],
+    },
+    {
+      sueldo: 55000,
+      especialidadId: "11",
+      turnos: [
+        { dia_semana: "Miércoles", hora_inicio: "10:00", hora_fin: "18:00" },
         { dia_semana: "Viernes", hora_inicio: "8:00", hora_fin: "12:00" },
       ],
     },
@@ -594,21 +763,63 @@ export const seed: InitialSeed = {
     },
     {
       codigo_servicio: '8',
+      nombre: 'Terapia Física',
+      descripcion: 'Rehabilitación para mejorar la movilidad y aliviar el dolor en lesiones musculoesqueléticas.',
+      precio: 4000,
+    },
+    {
+      codigo_servicio: '9',
+      nombre: 'Terapia Ocupacional',
+      descripcion: 'Intervención para mejorar habilidades motoras y cognitivas en la vida diaria.',
+      precio: 3800,
+    },
+    {
+      codigo_servicio: '10',
+      nombre: 'Tratamiento de Rehabilitación Cardíaca',
+      descripcion: 'Programa para mejorar la recuperación tras eventos cardíacos como infartos.',
+      precio: 5000,
+    },
+    {
+      codigo_servicio: '11',
+      nombre: 'Tratamiento para el Dolor Crónico',
+      descripcion: 'Manejo del dolor persistente con técnicas médicas y terapéuticas avanzadas.',
+      precio: 4500,
+    },
+    {
+      codigo_servicio: '12',
       nombre: 'Radiografía',
       descripcion: 'Examen médico de diagnóstico mediante radiografía para detectar problemas óseos o de tejidos internos.',
       precio: 3500,
     },
     {
-      codigo_servicio: '9',
+      codigo_servicio: '13',
       nombre: 'Ecografía',
       descripcion: 'Examen médico de diagnóstico mediante ecografía para obtener imágenes de órganos internos.',
       precio: 4000,
     },
     {
-      codigo_servicio: '10',
+      codigo_servicio: '14',
       nombre: 'Terapia Psicológica',
       descripcion: 'Tratamiento psicológico para trastornos emocionales y psicológicos.',
       precio: 3500,
+    },
+    {
+      codigo_servicio: '15',
+      nombre: 'Cirugía General',
+      descripcion: 'Procedimientos quirúrgicos para tratar diversas patologías con técnicas avanzadas.',
+      precio: 15000,
+    },
+    {
+      codigo_servicio: '16',
+      nombre: 'Cirugía Plástica',
+      descripcion: 'Intervenciones quirúrgicas estéticas y reconstructivas para mejorar la apariencia y funcionalidad.',
+      precio: 25000,
+    },
+    {
+      codigo_servicio: '17',
+      nombre: 'Cirugía Laparoscópica',
+      descripcion: 'Procedimientos mínimamente invasivos para diversas condiciones médicas.',
+      precio: 18000,
     },
   ],
 };

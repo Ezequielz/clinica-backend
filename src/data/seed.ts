@@ -48,7 +48,7 @@ async function main() {
     console.log(`${pacienteswhitObra_SocialCount ?? 0} usuarios son pacientes con obra social`)
   
     const usersToMedico = await prisma.user.findMany({
-        skip: 8
+        skip: 11
     });
 
     await Promise.all(
