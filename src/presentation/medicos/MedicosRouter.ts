@@ -17,14 +17,15 @@ export const MedicosRoutes = (): Router => {
     } = MedicosController;
 
     const {
-        validateAdmin
+        validateAdmin,
+        validateUser,
     } = AuthMiddleware;
 
     router.get('/', readMedicos);
-    router.get('/:id', readMedicoById);
+    router.get('/:id',[validateUser, validateAdmin], readMedicoById);
 
     router.post('/', [validateAdmin], createMedico);
-    router.patch('/:id', [validateAdmin], updateMedico);
+    router.patch('/:id', [validateUser, validateAdmin], updateMedico);
     router.delete('/:id', [validateAdmin], deleteMedico);
 
 

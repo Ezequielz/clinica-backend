@@ -14,17 +14,18 @@ export const UsersRoutes = (): Router => {
     } = UsersController;
 
     const {
-        validateAdmin
+        validateAdmin,
+        validateUser,
     } = AuthMiddleware;
     // /api/users
     // Ruta para obtener todos los usuarios
 
-  
-    router.get('/', readUsers);
-    router.get('/:id', readUserById);
+
+    router.get('/', [validateAdmin], readUsers);
+    router.get('/:id', [validateUser], readUserById);
 
 
-    router.patch('/:id',updateUser);
+    router.patch('/:id', [validateUser], updateUser);
     router.delete('/:id', [validateAdmin], deleteUser);
 
 

@@ -9,9 +9,11 @@ const createConsultasByPack = (req: Request, res: Response) => {
 
     const { code } = req.params;
     const body = req.body;
+    const pacienteId = req.body.user.paciente.id_paciente;
     const [error, consulta] = consultasPackDto.create({
         consultaData: {
             ...body,
+            pacienteId,
             paqueteId: code.toUpperCase(),
             servicioId: null
         }
@@ -28,8 +30,14 @@ const createConsultasByPack = (req: Request, res: Response) => {
 const createConsulta = (req: Request, res: Response) => {
 
     const body = req.body;
-
-    const [error, consulta] = consultaDto.create({ consultaData: { ...body, paqueteId: null } });
+    const pacienteId = req.body.user.paciente.id_paciente;
+    const [error, consulta] = consultaDto.create({
+        consultaData: {
+            ...body, 
+            paqueteId: null,
+            pacienteId,
+        }
+    });
     if (error) {
         res.status(400).json({ ok: false, error });
         return;

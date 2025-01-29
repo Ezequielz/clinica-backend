@@ -17,14 +17,15 @@ export const ConsultasRoutes = (): Router => {
 
     const {
         validateAdmin,
+        validateUserForConsulta,
     } = AuthMiddleware;
 
     // /api/consultas
     // Ruta para obtener todos los usuarios
 
-    router.get('/', readConsultas);
+    router.get('/',[ validateAdmin ], readConsultas);
 
-    router.get('/:id', readConsultaById);
+    router.get('/:id', [validateUserForConsulta], readConsultaById);
     
     router.post('/', createConsulta);
     router.post('/:code', createConsultasByPack);

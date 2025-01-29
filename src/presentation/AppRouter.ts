@@ -10,7 +10,10 @@ import { PaquetesRoutes } from './paquetes/PaquetesRouter';
 import { ConsultasRoutes } from './consultas/ConsultasRouter';
 import { AuthMiddleware } from './middlewares/auth.middleware';
 
-const { validateJWT } = AuthMiddleware;
+const {
+    validateJWT,
+    validateAdmin,
+} = AuthMiddleware;
 
 const router = Router();
 
@@ -25,11 +28,11 @@ router.use('/paquetes', PaquetesRoutes());
 
 router.use('/users', [validateJWT], UsersRoutes());
 
-router.use('/pacientes', [validateJWT], PacientesRoutes());
+router.use('/pacientes', [validateJWT, validateAdmin], PacientesRoutes());
 
 router.use('/medicos', [validateJWT], MedicosRoutes());
 
-router.use('/consultas',[validateJWT], ConsultasRoutes());
+router.use('/consultas', [validateJWT], ConsultasRoutes());
 
 
 

@@ -39,7 +39,13 @@ const validateJWT = async (req: Request, res: Response, next: NextFunction): Pro
                     select: {
                         id_paciente: true
                     }
-                }
+                },
+                medico: {
+                    select: {
+                        id_medico: true
+                    }
+                },
+
             }
         });
         if (!user) {
@@ -48,7 +54,7 @@ const validateJWT = async (req: Request, res: Response, next: NextFunction): Pro
         }
 
         req.body.user = user;
-
+     
         next();  // Llamar a next() para continuar con la ejecución del siguiente middleware o controlador
     } catch (error) {
         console.error(error);
@@ -56,6 +62,69 @@ const validateJWT = async (req: Request, res: Response, next: NextFunction): Pro
     }
 };
 
+const validateUser = (req: Request, res: Response, next: NextFunction): void => {
+    const user = req.body.user;
+    const { id } = req.params
+
+    if (!id) {
+        res.status(401).json({ ok: false, error: 'Missing ID' })
+        return
+    };
+    if (!user) {
+        res.status(401).json({ ok: false, error: 'Debes estar logueado para completar esta acción' })
+        return
+    };
+    if ((
+        user.id !== id
+        && user.paciente.id_paciente !== id
+        && user.medico.id_medico !== id
+    ) && user.rol !== Rol.ADMIN) {
+        res.status(401).json({ ok: false, error: 'No estás autorizado para esta acción' })
+        return
+    }
+
+    next();
+};
+const validateUserForConsulta = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+
+    const user = req.body.user;
+    const { id } = req.params
+
+
+    if (!id) {
+        res.status(401).json({ ok: false, error: 'Missing ID' })
+        return
+    };
+
+    if (!user) {
+        res.status(401).json({ ok: false, error: 'Debes estar logueado para completar esta acción' })
+        return
+    };
+    try {
+        if( user.rol !== Rol.ADMIN){
+            const consulta = await prisma.consulta.findUnique({
+                where: {id}
+            })
+            if (!consulta) {
+                res.status(404).json({ ok: false, error: 'Invalid consulta ID' });  
+                return; 
+            };
+
+            if ( consulta.pacienteId !== user.paciente.id_paciente ) {
+                res.status(401).json({ ok: false, error: 'No estás autorizado a esta acción' });  
+                return; 
+            };
+        }
+        
+        next();
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' }); 
+    }
+
+ 
+
+}
 const validateAdmin = (req: Request, res: Response, next: NextFunction): void => {
     const user = req.body.user;
     if (!user) {
@@ -115,11 +184,11 @@ const register = (req: Request, res: Response, next: NextFunction): void => {
 
 }
 
-
-
 export const AuthMiddleware = {
     validateJWT,
     validateAdmin,
+    validateUser,
+    validateUserForConsulta,
     login,
     register,
 

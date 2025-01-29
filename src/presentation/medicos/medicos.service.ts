@@ -7,7 +7,7 @@ import type { MedicoDTO, MedicoUpdateDTO } from '../../domain/dtos/medico/medico
 
 const createMedico = async (medicoDTO: MedicoDTO) => {
 
-    const {ok} = await checkExistCodigo_servicio(medicoDTO.especialidadId);
+    const { ok } = await checkExistCodigo_servicio(medicoDTO.especialidadId);
     if (!ok) throw CustomError.badRequest('Invalid especialidadId');
     // creacion del medico
     const { medico } = await readMedicoById(medicoDTO.userId);
@@ -26,7 +26,7 @@ const createMedico = async (medicoDTO: MedicoDTO) => {
 
     } catch (error: any) {
         console.error(error);
-  
+
         if (error.code === 'P2003') {
 
             return {
@@ -47,7 +47,24 @@ const createMedico = async (medicoDTO: MedicoDTO) => {
 const readMedicos = async () => {
 
     try {
-        const medicos = await prisma.medico.findMany();
+        const medicos = await prisma.medico.findMany({
+            select: {
+                id_medico: true,
+                especialidad: {
+                    select: {
+                        codigo_servicio: true,
+                        nombre: true
+                    }
+                },
+                turnos: {
+                    select: {
+                        dia_semana: true,
+                        hora_inicio: true,
+                        hora_fin: true,
+                    }
+                }
+            }
+        });
 
         return {
             ok: true,
@@ -76,12 +93,12 @@ const readMedicoById = async (id?: string) => {
 
                 ]
             },
-            omit:{
+            omit: {
                 createdAt: true,
                 updatedAt: true
             },
             include: {
-                especialidad:{
+                especialidad: {
                     select: {
                         nombre: true
                     }
@@ -176,9 +193,9 @@ const deleteMedico = async (id: string) => {
 
         return {
             ok: true,
-            medico:medicoToDelete
+            medico: medicoToDelete
         };
-        
+
     } catch (error) {
         console.log(error)
         return {
