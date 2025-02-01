@@ -38,6 +38,7 @@ const registerUser = async (registerUserDto: UserDTO) => {
     if (!token) throw CustomError.internalServer('Error while creating JWT');
 
     return {
+      ok: true,
       user: newUser,
       token
     };
