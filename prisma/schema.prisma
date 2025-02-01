@@ -22,6 +22,7 @@ model User {
   password  String
   telefono  String?
   direccion String?
+  imagen    String?
   rol       Rol       @default(USER)
   paciente  Paciente?
   medico    Medico?
@@ -30,14 +31,16 @@ model User {
 }
 
 model Paciente {
-  id_paciente    String           @id @default(uuid())
-  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId         String           @unique
-  obra_social    Boolean          @default(false)
+  id_paciente String   @id @default(uuid())
+  obra_social Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  ordenes        Orden[]
   Consulta       Consulta[]
   TurnoReservado TurnoReservado[]
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String           @unique
 }
 
 model Medico {
@@ -60,6 +63,7 @@ model Servicio {
   nombre          String
   descripcion     String
   precio          Float
+  imagen          String?
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
   PaqueteServicio PaqueteServicio[]
@@ -81,6 +85,7 @@ model Paquete {
   id                  String            @id @default(uuid())
   codigo_paquete      String            @unique
   nombre              String
+  imagen              String?
   precio_paquete      Float             @default(0)
   createdAt           DateTime          @default(now())
   updatedAt           DateTime          @updatedAt
@@ -89,22 +94,23 @@ model Paquete {
 }
 
 model Consulta {
-  id               String           @id @default(uuid())
-  fecha_consulta   DateTime
-  hora_consulta    String
-  pacienteId       String
-  medicoId         String
-  servicioId       String?
-  paqueteId        String?
-  monto_total      Float
-  pagado           Boolean          @default(false)
+  id             String   @id @default(uuid())
+  fecha_consulta DateTime
+  hora_consulta  String
+
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
   turnosReservados TurnoReservado[]
   paciente         Paciente         @relation(fields: [pacienteId], references: [id_paciente], onDelete: Cascade)
+  pacienteId       String
   medico           Medico           @relation(fields: [medicoId], references: [id_medico], onDelete: Cascade)
+  medicoId         String
   servicio         Servicio?        @relation(fields: [servicioId], references: [codigo_servicio], onDelete: Cascade)
+  servicioId       String?
   paquete          Paquete?         @relation(fields: [paqueteId], references: [codigo_paquete], onDelete: Cascade)
+  paqueteId        String?
+  orden            Orden            @relation(fields: [ordenId], references: [id], onDelete: Cascade)
+  ordenId          String
 }
 
 model Turno {
@@ -134,4 +140,17 @@ model TurnoReservado {
 
   consulta   Consulta @relation(fields: [consultaId], references: [id], onDelete: Cascade)
   consultaId String
+}
+
+model Orden {
+  id          String     @id @default(uuid())
+  pagado      Boolean    @default(false)
+  monto_total Float
+  paciente    Paciente   @relation(fields: [pacienteId], references: [id_paciente], onDelete: Cascade)
+  pacienteId  String
+  consultas   Consulta[]
+
+  transactionId String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
