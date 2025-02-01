@@ -11,7 +11,6 @@ export interface ConsultaDTO {
     servicioId?: string;
     paqueteId?: string;
     paquetePrice?: number;
-    pagado?: boolean;
 };
 
 export interface ConsultaUpdateDTO extends Partial<ConsultaDTO> {
@@ -31,7 +30,6 @@ const create = ({ consultaData }: ConsultaData): [string?, ConsultaDTO?] => {
         servicioId,
         paqueteId,
         paquetePrice,
-        pagado,
     } = consultaData;
 
     if (!servicioId && !paqueteId) return ['Missing servicioId or paqueteId'];
@@ -60,7 +58,6 @@ const create = ({ consultaData }: ConsultaData): [string?, ConsultaDTO?] => {
         servicioId,
         paqueteId,
         paquetePrice,
-        pagado,
     }];
 
 };
@@ -72,7 +69,7 @@ const update = ({ consultaData }: ConsultaData): [string?, ConsultaUpdateDTO?] =
         fecha_consulta,
         hora_consulta,      
         medicoId,
-        pagado,
+
     } = consultaData;
 
     if (!id) return ['Missing id'];
@@ -82,7 +79,7 @@ const update = ({ consultaData }: ConsultaData): [string?, ConsultaUpdateDTO?] =
         fecha_consulta,
         hora_consulta,      
         medicoId,
-        pagado,
+      
     }];
 
 };

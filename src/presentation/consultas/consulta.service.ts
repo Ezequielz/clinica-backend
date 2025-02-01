@@ -45,45 +45,125 @@ const createConsulta = async (consultaDTO: ConsultaDTO) => {
     const precioWhitDiscount = paciente.obra_social ? fullPrice * 0.85 : fullPrice;
 
     try {
+        const result = await prisma.$transaction(async (tx) => {
+            // Buscar orden existente o crear una nueva
+            // let order = await tx.orden.findFirst({
+            //     where: {
+            //         pacienteId: consultaDTO.pacienteId,
+            //         pagado: false
+            //     }
+            // });
 
-        const createConsulta = await prisma.consulta.create({
-            data: {
-                ...rest,
-                medicoId: medicoForThisService.id_medico,
-                monto_total: precioWhitDiscount,
-                fecha_consulta: fecha,
-            },
-        });
-        
-        const createTurnoReservado = await prisma.turnoReservado.create({
-            data: {
-                fecha_turno: fecha,
-                hora_turno: hora_consulta,
-                medicoId: medicoForThisService.id_medico,
-                pacienteId: consultaDTO.pacienteId,
-                turnoId: turno.id_turno,
-                consultaId: createConsulta.id, 
-            },
-        });
 
-        await prisma.turnoReservado.update({
-            where: { id_reserva: createTurnoReservado.id_reserva },
-            data: { consultaId: createConsulta.id },
+            const order = await tx.orden.create({
+                data: {
+                    monto_total: 0,
+                    pacienteId: consultaDTO.pacienteId
+                }
+            });
+
+
+            // Crear consulta
+            const consulta = await tx.consulta.create({
+                data: {
+                    ...rest,
+                    medicoId: medicoForThisService.id_medico,
+                    fecha_consulta: fecha,
+                    ordenId: order.id
+                }
+            });
+
+            // Crear turno reservado
+            const turnoReservado = await tx.turnoReservado.create({
+                data: {
+                    fecha_turno: fecha,
+                    hora_turno: hora_consulta,
+                    medicoId: medicoForThisService.id_medico,
+                    pacienteId: consultaDTO.pacienteId,
+                    turnoId: turno.id_turno,
+                    consultaId: consulta.id,
+                }
+            });
+
+            // Actualizar la orden con la consulta y el precio
+            await tx.orden.update({
+                where: { id: order.id },
+                data: {
+                    consultas: { connect: { id: consulta.id } },
+                    monto_total: { increment: precioWhitDiscount }
+                }
+            });
+
+            return { consulta, turnoReservado };
         });
 
         return {
             ok: true,
-            consulta: createConsulta,
-            turnoReservado: createTurnoReservado,
+            consulta: result.consulta,
+            turnoReservado: result.turnoReservado,
         };
-
     } catch (error) {
-        console.log(error);
+        console.error("Error en la transacción:", error);
         return {
             ok: false,
             error,
         };
     }
+
+    // try {
+
+    //     const order = await prisma.orden.create({
+    //         data: {
+    //             monto_total: precioWhitDiscount,
+    //             pacienteId: consultaDTO.pacienteId
+    //         }
+    //     })
+
+    //     const consulta = await prisma.consulta.create({
+    //         data: {
+    //             ...rest,
+    //             medicoId: medicoForThisService.id_medico,
+    //             fecha_consulta: fecha,
+    //             ordenId: order.id
+    //         },
+    //     });
+
+    //     const createTurnoReservado = await prisma.turnoReservado.create({
+    //         data: {
+    //             fecha_turno: fecha,
+    //             hora_turno: hora_consulta,
+    //             medicoId: medicoForThisService.id_medico,
+    //             pacienteId: consultaDTO.pacienteId,
+    //             turnoId: turno.id_turno,
+    //             consultaId: consulta.id, 
+    //         },
+    //     });
+
+    //     await prisma.orden.update({
+    //         where: { id: order.id },
+    //         data: {
+    //             consultas: { connect: { id: consulta.id } }, 
+    //         }
+    //     });
+
+    //     await prisma.turnoReservado.update({
+    //         where: { id_reserva: createTurnoReservado.id_reserva },
+    //         data: { consultaId: consulta.id },
+    //     });
+
+    //     return {
+    //         ok: true,
+    //         consulta: createConsulta,
+    //         turnoReservado: createTurnoReservado,
+    //     };
+
+    // } catch (error) {
+    //     console.log(error);
+    //     return {
+    //         ok: false,
+    //         error,
+    //     };
+    // }
 
 };
 
@@ -100,8 +180,21 @@ const createConsultasByPack = async (consultasPackDTO: ConsultasPackDTO) => {
         throw CustomError.badRequest(`la canidad de paquetes: ${paqueteDetails.length} no es válida para el paquete ${paqueteId} seleccionado: requiere ${paquete!.servicios_incluidos.length} paquetes`);
     };
 
+    // Validar paciente
+    const { ok: existPaciente, paciente } = await checkExistPaciente(consultasPackDTO.pacienteId);
+    if (!existPaciente || !paciente) {
+        throw CustomError.badRequest(`No se pudo encontrar al paciente con id: ${consultasPackDTO.pacienteId}`);
+    };
+
 
     return await prisma.$transaction(async (tx) => {
+        const order = await tx.orden.create({
+            data: {
+                monto_total: 0,
+                pacienteId: consultasPackDTO.pacienteId
+            }
+        });
+
         const consultasPromises = paqueteDetails.map(async (servicio) => {
             const consultaDTO = {
                 ...servicio,
@@ -118,16 +211,11 @@ const createConsultasByPack = async (consultasPackDTO: ConsultasPackDTO) => {
                 throw CustomError.badRequest(`Código de servicio: ${servicioId} inválido, no existente`);
             };
 
+
             // Verificar médico asociado al servicio
             const medicoForThisService = servicioData.medicos.find((medico) => consultaDTO.medicoId.includes(medico.id_medico));
             if (!medicoForThisService) {
                 throw CustomError.badRequest(`El médico con id: ${medicoId} no está asociado al servicio ${servicioData?.nombre}`);
-            };
-
-            // Validar paciente
-            const { ok: existPaciente, paciente } = await checkExistPaciente(consultaDTO.pacienteId);
-            if (!existPaciente || !paciente) {
-                throw CustomError.badRequest(`No se pudo encontrar al paciente con id: ${consultaDTO.pacienteId}`);
             };
 
             // Verificar turno disponible
@@ -136,9 +224,6 @@ const createConsultasByPack = async (consultasPackDTO: ConsultasPackDTO) => {
                 throw CustomError.badRequest(msg ?? 'No se pudo corroborar la fecha');
             };
 
-            const fullPrice = consultaDTO.paquetePrice ? consultaDTO.paquetePrice : servicioData.precio;
-            const precioWithDiscount = paciente.obra_social ? fullPrice * 0.85 : fullPrice;
-
             // Crear consulta y turno dentro de la transacción
             const consulta = await tx.consulta.create({
                 data: {
@@ -146,8 +231,9 @@ const createConsultasByPack = async (consultasPackDTO: ConsultasPackDTO) => {
                     pacienteId: consultasPackDTO.pacienteId,
                     paqueteId,
                     medicoId: medicoForThisService.id_medico,
-                    monto_total: precioWithDiscount,
                     fecha_consulta: fecha,
+
+                    ordenId: order.id,
                 },
             });
 
@@ -168,9 +254,21 @@ const createConsultasByPack = async (consultasPackDTO: ConsultasPackDTO) => {
         // Esperar que todas las consultas se completen
         const createdConsultas = await Promise.all(consultasPromises);
 
+
+        const precioWithDiscount = paciente.obra_social ? paquete!.precio_paquete * 0.80 : paquete!.precio_paquete;
+
+        const orderUpdated= await tx.orden.update({
+            where: { id: order.id },
+            data: {
+                consultas: { connect: createdConsultas.map(consulta => ({ id: consulta.id })) },
+                monto_total: precioWithDiscount
+            }
+        });
+
         return {
             ok: true,
             consultas: createdConsultas,
+            order: orderUpdated,
         };
     });
 
@@ -275,64 +373,64 @@ const readConsultaById = async (id: string) => {
 };
 const readGanancias = async (gananciasDTO: GananciasDTO) => {
 
-    const { fecha_inicio, fecha_fin, typo } = gananciasDTO;
-    try {
-        const where: any = {};
+    // const { fecha_inicio, fecha_fin, typo } = gananciasDTO;
+    // try {
+    //     const where: any = {};
 
-        if (fecha_inicio && fecha_fin) {
-            where.updatedAt = {
-                gte: new Date(fecha_inicio),
-                lte: new Date(fecha_fin),
-            };
-        } else if (fecha_inicio) {
-            const startDate = new Date(fecha_inicio);
-            const endDate = new Date(fecha_inicio);
-            endDate.setHours(23, 59, 59, 999); // Asegura incluir todo el día
+    //     if (fecha_inicio && fecha_fin) {
+    //         where.updatedAt = {
+    //             gte: new Date(fecha_inicio),
+    //             lte: new Date(fecha_fin),
+    //         };
+    //     } else if (fecha_inicio) {
+    //         const startDate = new Date(fecha_inicio);
+    //         const endDate = new Date(fecha_inicio);
+    //         endDate.setHours(23, 59, 59, 999); // Asegura incluir todo el día
 
-            where.updatedAt = {
-                gte: startDate,
-                lte: endDate,
-            };
+    //         where.updatedAt = {
+    //             gte: startDate,
+    //             lte: endDate,
+    //         };
 
-            
-        }
 
-        where.pagado = true
+    //     }
 
-        if (typo === "pack") {
-            where.paqueteId = { not: null };
-        } else if (typo === "servicio") {
-            where.paqueteId = null;
-        }
+    //     where.pagado = true
 
-        const consultas = await prisma.consulta.findMany({
-            where,
-            select: {
-                monto_total: true,
-            },
-        });
+    //     if (typo === "pack") {
+    //         where.paqueteId = { not: null };
+    //     } else if (typo === "servicio") {
+    //         where.paqueteId = null;
+    //     }
 
-        const totalGanancias = consultas.reduce((acc, consulta) => acc + consulta.monto_total, 0);
+    //     const consultas = await prisma.consulta.findMany({
+    //         where,
+    //         select: {
+    //             monto_total: true,
+    //         },
+    //     });
 
-        return {
-            ok: true,
-            ganancias: totalGanancias,
-        };
-    } catch (error) {
-        console.log(error);
+    //     const totalGanancias = consultas.reduce((acc, consulta) => acc + consulta.monto_total, 0);
 
-        return {
-            ok: false,
-            msg: "Error al obtener las ganancias de consultas",
-        };
-    }
+    //     return {
+    //         ok: true,
+    //         ganancias: totalGanancias,
+    //     };
+    // } catch (error) {
+    //     console.log(error);
+
+    //     return {
+    //         ok: false,
+    //         msg: "Error al obtener las ganancias de consultas",
+    //     };
+    // }
 };
 
 
 
 
 const updateConsulta = async (consultaDTO: ConsultaUpdateDTO) => {
-    const { id, fecha_consulta, hora_consulta, medicoId, pagado } = consultaDTO;
+    const { id, fecha_consulta, hora_consulta, medicoId } = consultaDTO;
 
     // Verificar si la consulta existe
     const { ok, consulta } = await checkExistConsulta(id);
@@ -383,7 +481,6 @@ const updateConsulta = async (consultaDTO: ConsultaUpdateDTO) => {
         const updatedConsulta = await prisma.consulta.update({
             where: { id },
             data: {
-                pagado,
                 hora_consulta: horaUpdated,
                 fecha_consulta: fechaUpdated,
                 medicoId: medicoUpdated,

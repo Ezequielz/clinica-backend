@@ -6,7 +6,6 @@ export interface ConsultasPackDTO {
     pacienteId: string;
     paqueteId?: string;
     paqueteDetails: PaqueteDetails[];
-    pagado?: boolean;
 };
 
 interface PaqueteDetails {
@@ -25,7 +24,6 @@ const create = ({ consultaData }: ConsultaData): [string?, ConsultasPackDTO?] =>
         pacienteId,
         paqueteId,
         paqueteDetails,
-        pagado,
     } = consultaData;
 
     if (!pacienteId) return ['Missing pacienteId'];
@@ -51,7 +49,7 @@ const create = ({ consultaData }: ConsultaData): [string?, ConsultasPackDTO?] =>
         pacienteId,
         paqueteId,
         paqueteDetails,
-        pagado,
+
     }];
 
 };

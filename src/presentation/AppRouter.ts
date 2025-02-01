@@ -9,6 +9,7 @@ import { MedicalSpecialitiesRoutes } from './servicios-medicos/MedicalSpecialiti
 import { PaquetesRoutes } from './paquetes/PaquetesRouter';
 import { ConsultasRoutes } from './consultas/ConsultasRouter';
 import { AuthMiddleware } from './middlewares/auth.middleware';
+import { OrdersRoutes } from './orders/OrdersRouter';
 
 const {
     validateJWT,
@@ -33,6 +34,8 @@ router.use('/pacientes', [validateJWT, validateAdmin], PacientesRoutes());
 router.use('/medicos', [validateJWT], MedicosRoutes());
 
 router.use('/consultas', [validateJWT], ConsultasRoutes());
+
+router.use('/orders', [validateJWT], OrdersRoutes());
 
 
 
