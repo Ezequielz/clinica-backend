@@ -47,7 +47,7 @@ const createConsulta = async (consultaDTO: ConsultaDTO) => {
     try {
         const result = await prisma.$transaction(async (tx) => {
             // Buscar orden existente o crear una nueva
-            // let order = await tx.orden.findFirst({
+            // let order = await tx.order.findFirst({
             //     where: {
             //         pacienteId: consultaDTO.pacienteId,
             //         pagado: false
@@ -55,7 +55,7 @@ const createConsulta = async (consultaDTO: ConsultaDTO) => {
             // });
 
 
-            const order = await tx.orden.create({
+            const order = await tx.order.create({
                 data: {
                     monto_total: 0,
                     pacienteId: consultaDTO.pacienteId
@@ -69,7 +69,7 @@ const createConsulta = async (consultaDTO: ConsultaDTO) => {
                     ...rest,
                     medicoId: medicoForThisService.id_medico,
                     fecha_consulta: fecha,
-                    ordenId: order.id
+                    orderId: order.id
                 }
             });
 
@@ -86,7 +86,7 @@ const createConsulta = async (consultaDTO: ConsultaDTO) => {
             });
 
             // Actualizar la orden con la consulta y el precio
-            await tx.orden.update({
+            await tx.order.update({
                 where: { id: order.id },
                 data: {
                     consultas: { connect: { id: consulta.id } },
@@ -112,7 +112,7 @@ const createConsulta = async (consultaDTO: ConsultaDTO) => {
 
     // try {
 
-    //     const order = await prisma.orden.create({
+    //     const order = await prisma.order.create({
     //         data: {
     //             monto_total: precioWhitDiscount,
     //             pacienteId: consultaDTO.pacienteId
@@ -124,7 +124,7 @@ const createConsulta = async (consultaDTO: ConsultaDTO) => {
     //             ...rest,
     //             medicoId: medicoForThisService.id_medico,
     //             fecha_consulta: fecha,
-    //             ordenId: order.id
+    //             orderId: order.id
     //         },
     //     });
 
@@ -139,7 +139,7 @@ const createConsulta = async (consultaDTO: ConsultaDTO) => {
     //         },
     //     });
 
-    //     await prisma.orden.update({
+    //     await prisma.order.update({
     //         where: { id: order.id },
     //         data: {
     //             consultas: { connect: { id: consulta.id } }, 
@@ -188,7 +188,7 @@ const createConsultasByPack = async (consultasPackDTO: ConsultasPackDTO) => {
 
 
     return await prisma.$transaction(async (tx) => {
-        const order = await tx.orden.create({
+        const order = await tx.order.create({
             data: {
                 monto_total: 0,
                 pacienteId: consultasPackDTO.pacienteId
@@ -233,7 +233,7 @@ const createConsultasByPack = async (consultasPackDTO: ConsultasPackDTO) => {
                     medicoId: medicoForThisService.id_medico,
                     fecha_consulta: fecha,
 
-                    ordenId: order.id,
+                    orderId: order.id,
                 },
             });
 
@@ -257,7 +257,7 @@ const createConsultasByPack = async (consultasPackDTO: ConsultasPackDTO) => {
 
         const precioWithDiscount = paciente.obra_social ? paquete!.precio_paquete * 0.80 : paquete!.precio_paquete;
 
-        const orderUpdated= await tx.orden.update({
+        const orderUpdated= await tx.order.update({
             where: { id: order.id },
             data: {
                 consultas: { connect: createdConsultas.map(consulta => ({ id: consulta.id })) },

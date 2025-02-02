@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { handleError } from '../helpers/handleError';
 import { CustomError } from '../helpers/custom.error';
 import { OrdersService } from './orders.service';
-import { orderDto } from '../../domain/dtos/orden/orden.dto';
+import { orderDto } from '../../domain/dtos/order/order.dto';
 
 
 // const createOrder =  (req: Request, res: Response) => {
@@ -52,7 +52,7 @@ const updateOrder = (req: Request, res: Response) => {
     const { id } = req.params;
     const body = req.body;
 
-    const [error, order] = orderDto.update({ ordenData: { id, ...body } })
+    const [error, order] = orderDto.update({ orderData: { id, ...body } })
     if (error) {
         res.status(400).json({ ok: false, error });
         return;

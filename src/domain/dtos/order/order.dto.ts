@@ -1,24 +1,24 @@
 
-interface OrdenData {
-    ordenData: { [key: string]: any }
+interface OrderData {
+    orderData: { [key: string]: any }
 };
 
-export interface OrdenDTO {
+export interface OrderDTO {
     monto_total: number;
     pacienteId: string;
     transactionId?: string;
 };
 
-export interface OrdenUpdateDTO {
+export interface OrderUpdateDTO {
     id: string;
     pagado?: boolean
     transactionId?: string;
 };
 
 
-const create = ({ ordenData }: OrdenData): [string?, OrdenDTO?] => {
+const create = ({ orderData }: OrderData): [string?, OrderDTO?] => {
 
-    const { monto_total, pacienteId, transactionId } = ordenData;
+    const { monto_total, pacienteId, transactionId } = orderData;
 
     if (!monto_total) return ['Missing monto_total'];
     if (!pacienteId) return ['Missing pacienteId'];
@@ -31,9 +31,9 @@ const create = ({ ordenData }: OrdenData): [string?, OrdenDTO?] => {
 
 };
 
-const update = ({ ordenData }: OrdenData): [string?, OrdenUpdateDTO?] => {
+const update = ({ orderData }: OrderData): [string?, OrderUpdateDTO?] => {
 
-    const { id, pagado, transactionId } = ordenData;
+    const { id, pagado, transactionId } = orderData;
 
     if (!id) return ['Missing order Id'];
 

@@ -1,6 +1,6 @@
 import prisma from '../../lib/prisma';
 import { CustomError } from '../helpers/custom.error';
-import type { OrdenUpdateDTO } from '../../domain/dtos/orden/orden.dto';
+import type { OrderUpdateDTO } from '../../domain/dtos/order/order.dto';
 
 
 
@@ -31,7 +31,7 @@ import type { OrdenUpdateDTO } from '../../domain/dtos/orden/orden.dto';
 const readOrders = async () => {
 
     try {
-        const orders = await prisma.orden.findMany()
+        const orders = await prisma.order.findMany()
 
         return {
             ok: true,
@@ -51,7 +51,7 @@ const readOrders = async () => {
 const readOrderById = async (id: string) => {
 
     try {
-        const order = await prisma.orden.findUnique({
+        const order = await prisma.order.findUnique({
             where: {
                 id
             }
@@ -82,15 +82,15 @@ const readOrderById = async (id: string) => {
 
 }
 
-const updateOrder = async (orderUpdateDto: OrdenUpdateDTO) => {
+const updateOrder = async (orderUpdateDto: OrderUpdateDTO) => {
 
-    const order = await prisma.orden.findUnique({ where: { id: orderUpdateDto.id } });
+    const order = await prisma.order.findUnique({ where: { id: orderUpdateDto.id } });
     if (!order) throw CustomError.badRequest('Invalid Order Id');
 
 
     try {
 
-        const updatedOrder = await prisma.orden.update({
+        const updatedOrder = await prisma.order.update({
             where: {
                 id: orderUpdateDto.id
             },
@@ -118,7 +118,7 @@ const deleteOrder = async (id: string) => {
     if (!ok) throw CustomError.badRequest('Invalid ordern id');
 
     try {
-        const orden = await prisma.orden.delete({
+        const order = await prisma.order.delete({
             where: {
                 id
             }
@@ -127,14 +127,14 @@ const deleteOrder = async (id: string) => {
 
         return {
             ok: true,
-            orden
+            order
         };
 
     } catch (error) {
         console.log(error)
         return {
             ok: false,
-            orden: null,
+            order: null,
             msg: 'Error al eliminar orden',
         };
     }

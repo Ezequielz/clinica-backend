@@ -8,7 +8,7 @@ import { AuthMiddleware } from '../middlewares/auth.middleware';
 export const OrdersRoutes = (): Router => {
     const router = Router();
 
-    // /api/pacientes
+    // /api/orders
     const {
         readOrders,
         readOrderyId,

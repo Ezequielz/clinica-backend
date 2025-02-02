@@ -36,7 +36,7 @@ model Paciente {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  ordenes        Orden[]
+  ordenes        Order[]
   Consulta       Consulta[]
   TurnoReservado TurnoReservado[]
   user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -109,8 +109,8 @@ model Consulta {
   servicioId       String?
   paquete          Paquete?         @relation(fields: [paqueteId], references: [codigo_paquete], onDelete: Cascade)
   paqueteId        String?
-  orden            Orden            @relation(fields: [ordenId], references: [id], onDelete: Cascade)
-  ordenId          String
+  order            Order            @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId          String
 }
 
 model Turno {
@@ -142,9 +142,10 @@ model TurnoReservado {
   consultaId String
 }
 
-model Orden {
+model Order {
   id          String     @id @default(uuid())
   pagado      Boolean    @default(false)
+  pagadoAt    DateTime?
   monto_total Float
   paciente    Paciente   @relation(fields: [pacienteId], references: [id_paciente], onDelete: Cascade)
   pacienteId  String
