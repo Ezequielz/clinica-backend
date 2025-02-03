@@ -3,6 +3,7 @@ import { handleError } from '../helpers/handleError';
 import { CustomError } from '../helpers/custom.error';
 import { OrdersService } from './orders.service';
 import { orderDto } from '../../domain/dtos/order/order.dto';
+import { gananciasDto } from '../../domain/dtos/consulta/ganancia.dto';
 
 
 // const createOrder =  (req: Request, res: Response) => {
@@ -13,7 +14,7 @@ import { orderDto } from '../../domain/dtos/order/order.dto';
 //             res.status(400).json({ ok: false, error });
 //             return;
 //         };
-    
+
 //         OrdersService.createOrder(orden!)
 //             .then(resp => {
 //                 if (!resp.orden) throw CustomError.notFound(resp.msg)
@@ -21,7 +22,7 @@ import { orderDto } from '../../domain/dtos/order/order.dto';
 //             }
 //             )
 //             .catch((error) => handleError(error, res));
-    
+
 // };
 
 const readOrders = (req: Request, res: Response) => {
@@ -46,6 +47,21 @@ const readOrderyId = (req: Request, res: Response) => {
         .catch((error) => handleError(error, res));
 
 };
+
+const readGanancias = (req: Request, res: Response) => {
+
+    const body = req.body;
+
+    const [error, ganancias] = gananciasDto.create({ gananciaData: body });
+    if (error) {
+        res.status(400).json({ ok: false, error });
+        return;
+    };
+    OrdersService.readGanancias(ganancias!)
+        .then(resp => res.status(200).json(resp))
+        .catch((error) => handleError(error, res));
+}
+
 
 const updateOrder = (req: Request, res: Response) => {
 
@@ -78,6 +94,7 @@ export const OrdersController = {
     // createOrder,
     readOrders,
     readOrderyId,
+    readGanancias,
     updateOrder,
     deleteOrder,
 };

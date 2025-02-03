@@ -11,7 +11,6 @@ export const ConsultasRoutes = (): Router => {
         createConsultasByPack,
         readConsultas,
         readConsultaById,
-        readGanancias,
         updateConsulta,
         deleteConsulta,
     } = ConsultasController;
@@ -25,8 +24,6 @@ export const ConsultasRoutes = (): Router => {
     // Ruta para obtener todos los usuarios
 
     router.get('/',[ validateAdmin ], readConsultas);
-    router.get('/ganancias',[ validateAdmin ], readGanancias);
-
 
     router.get('/:id', [validateUserForConsulta], readConsultaById);
     

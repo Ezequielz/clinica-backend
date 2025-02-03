@@ -1,6 +1,7 @@
 import prisma from '../../lib/prisma';
 import { CustomError } from '../helpers/custom.error';
 import type { OrderUpdateDTO } from '../../domain/dtos/order/order.dto';
+import { GananciasDTO } from '../../domain/dtos/consulta/ganancia.dto';
 
 
 
@@ -47,7 +48,7 @@ const readOrders = async () => {
         }
     }
 
-}
+};
 const readOrderById = async (id: string) => {
 
     try {
@@ -80,7 +81,66 @@ const readOrderById = async (id: string) => {
         }
     }
 
-}
+};
+const readGanancias = async (gananciasDTO: GananciasDTO) => {
+    const { fecha_inicio, fecha_fin, typo } = gananciasDTO;
+
+    try {
+        const where: any = {
+            pagado: true,
+            consultas: {
+                some: {}, // Para poder filtrar dentro de las consultas
+            },
+        };
+
+        if (fecha_inicio && fecha_fin) {
+            where.pagadoAt = {
+                gte: new Date(fecha_inicio),
+                lte: new Date(fecha_fin),
+            };
+        } else if (fecha_inicio) {
+            const startDate = new Date(fecha_inicio);
+            const endDate = new Date(fecha_inicio);
+            endDate.setHours(23, 59, 59, 999);
+
+            where.pagadoAt = {
+                gte: startDate,
+                lte: endDate,
+            };
+        }
+
+        // Filtrar consultas por tipo
+        if (typo === "pack") {
+            where.consultas.some.paqueteId = { not: null };
+        } else if (typo === "servicio") {
+            where.consultas.some.paqueteId = null;
+        }
+
+        
+        const orders = await prisma.order.findMany({
+            where,
+            select: {
+                monto_total: true,
+            },
+        });
+
+   
+        const totalGanancias = orders.reduce((acc, order) => acc + order.monto_total, 0);
+
+        return {
+            ok: true,
+            ganancias: totalGanancias,
+        };
+    } catch (error) {
+        console.log(error);
+
+        return {
+            ok: false,
+            msg: "Error al obtener las ganancias de consultas",
+        };
+    }
+};
+
 
 const updateOrder = async (orderUpdateDto: OrderUpdateDTO) => {
 
@@ -145,6 +205,7 @@ export const OrdersService = {
     // createOrder,
     readOrders,
     readOrderById,
+    readGanancias,
     updateOrder,
     deleteOrder,
 };

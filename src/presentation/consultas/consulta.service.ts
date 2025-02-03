@@ -10,7 +10,6 @@ import { ConsultasPackDTO } from '../../domain/dtos/consulta/consultasPack.dto';
 import type { ConsultaUpdateDTO, ConsultaDTO } from '../../domain/dtos/consulta/consulta.dto';
 import { checkExistConsulta } from '../helpers/checkExistConsulta';
 import { checkServiceOfMedic } from '../helpers/checkServiceOfMedic';
-import { GananciasDTO } from '../../domain/dtos/consulta/ganancia.dto';
 
 const createConsulta = async (consultaDTO: ConsultaDTO) => {
 
@@ -46,15 +45,7 @@ const createConsulta = async (consultaDTO: ConsultaDTO) => {
 
     try {
         const result = await prisma.$transaction(async (tx) => {
-            // Buscar orden existente o crear una nueva
-            // let order = await tx.order.findFirst({
-            //     where: {
-            //         pacienteId: consultaDTO.pacienteId,
-            //         pagado: false
-            //     }
-            // });
-
-
+     
             const order = await tx.order.create({
                 data: {
                     monto_total: 0,
@@ -109,61 +100,6 @@ const createConsulta = async (consultaDTO: ConsultaDTO) => {
             error,
         };
     }
-
-    // try {
-
-    //     const order = await prisma.order.create({
-    //         data: {
-    //             monto_total: precioWhitDiscount,
-    //             pacienteId: consultaDTO.pacienteId
-    //         }
-    //     })
-
-    //     const consulta = await prisma.consulta.create({
-    //         data: {
-    //             ...rest,
-    //             medicoId: medicoForThisService.id_medico,
-    //             fecha_consulta: fecha,
-    //             orderId: order.id
-    //         },
-    //     });
-
-    //     const createTurnoReservado = await prisma.turnoReservado.create({
-    //         data: {
-    //             fecha_turno: fecha,
-    //             hora_turno: hora_consulta,
-    //             medicoId: medicoForThisService.id_medico,
-    //             pacienteId: consultaDTO.pacienteId,
-    //             turnoId: turno.id_turno,
-    //             consultaId: consulta.id, 
-    //         },
-    //     });
-
-    //     await prisma.order.update({
-    //         where: { id: order.id },
-    //         data: {
-    //             consultas: { connect: { id: consulta.id } }, 
-    //         }
-    //     });
-
-    //     await prisma.turnoReservado.update({
-    //         where: { id_reserva: createTurnoReservado.id_reserva },
-    //         data: { consultaId: consulta.id },
-    //     });
-
-    //     return {
-    //         ok: true,
-    //         consulta: createConsulta,
-    //         turnoReservado: createTurnoReservado,
-    //     };
-
-    // } catch (error) {
-    //     console.log(error);
-    //     return {
-    //         ok: false,
-    //         error,
-    //     };
-    // }
 
 };
 
@@ -371,63 +307,6 @@ const readConsultaById = async (id: string) => {
     }
 
 };
-const readGanancias = async (gananciasDTO: GananciasDTO) => {
-
-    // const { fecha_inicio, fecha_fin, typo } = gananciasDTO;
-    // try {
-    //     const where: any = {};
-
-    //     if (fecha_inicio && fecha_fin) {
-    //         where.updatedAt = {
-    //             gte: new Date(fecha_inicio),
-    //             lte: new Date(fecha_fin),
-    //         };
-    //     } else if (fecha_inicio) {
-    //         const startDate = new Date(fecha_inicio);
-    //         const endDate = new Date(fecha_inicio);
-    //         endDate.setHours(23, 59, 59, 999); // Asegura incluir todo el día
-
-    //         where.updatedAt = {
-    //             gte: startDate,
-    //             lte: endDate,
-    //         };
-
-
-    //     }
-
-    //     where.pagado = true
-
-    //     if (typo === "pack") {
-    //         where.paqueteId = { not: null };
-    //     } else if (typo === "servicio") {
-    //         where.paqueteId = null;
-    //     }
-
-    //     const consultas = await prisma.consulta.findMany({
-    //         where,
-    //         select: {
-    //             monto_total: true,
-    //         },
-    //     });
-
-    //     const totalGanancias = consultas.reduce((acc, consulta) => acc + consulta.monto_total, 0);
-
-    //     return {
-    //         ok: true,
-    //         ganancias: totalGanancias,
-    //     };
-    // } catch (error) {
-    //     console.log(error);
-
-    //     return {
-    //         ok: false,
-    //         msg: "Error al obtener las ganancias de consultas",
-    //     };
-    // }
-};
-
-
-
 
 const updateConsulta = async (consultaDTO: ConsultaUpdateDTO) => {
     const { id, fecha_consulta, hora_consulta, medicoId } = consultaDTO;
@@ -510,7 +389,6 @@ const updateConsulta = async (consultaDTO: ConsultaUpdateDTO) => {
 };
 
 
-
 const deleteConsulta = async (id: string) => {
 
     const { ok, consulta } = await checkExistConsulta(id);
@@ -555,7 +433,6 @@ export const ConsultasService = {
     createConsultasByPack,
     readConsultas,
     readConsultaById,
-    readGanancias,
     updateConsulta,
     deleteConsulta,
 

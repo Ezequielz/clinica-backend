@@ -4,7 +4,6 @@ import { handleError } from '../helpers/handleError';
 import { consultaDto } from '../../domain/dtos/consulta/consulta.dto';
 import { consultasPackDto } from '../../domain/dtos/consulta/consultasPack.dto';
 import { CustomError } from '../helpers/custom.error';
-import { gananciasDto } from '../../domain/dtos/consulta/ganancia.dto';
 
 const createConsultasByPack = (req: Request, res: Response) => {
 
@@ -64,21 +63,6 @@ const readConsultaById = (req: Request, res: Response) => {
         })
         .catch((error) => handleError(error, res));
 };
-
-const readGanancias = (req: Request, res: Response) => {
-
-    const body = req.body;
-
-    const [error, ganancias] = gananciasDto.create({ gananciaData: body });
-    if (error) {
-        res.status(400).json({ ok: false, error });
-        return;
-    };
-    ConsultasService.readGanancias(ganancias!)
-        .then(resp => res.status(200).json(resp))
-        .catch((error) => handleError(error, res));
-}
-
 const updateConsulta = (req: Request, res: Response) => {
 
     const { id } = req.params;
@@ -111,7 +95,6 @@ export const ConsultasController = {
     createConsultasByPack,
     readConsultas,
     readConsultaById,
-    readGanancias,
     updateConsulta,
     deleteConsulta,
 };

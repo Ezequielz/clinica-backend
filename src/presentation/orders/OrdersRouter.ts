@@ -10,6 +10,7 @@ export const OrdersRoutes = (): Router => {
     const {
         readOrders,
         readOrderyId,
+        readGanancias,
         updateOrder,
         deleteOrder,
 
@@ -24,6 +25,7 @@ export const OrdersRoutes = (): Router => {
 
     router.get('/', [validateAdmin], readOrders);
     router.get('/:id', [validateUser], readOrderyId);
+    router.get('/ganancias',[ validateAdmin ], readGanancias);
 
     router.patch('/:id', [validateUserForOrder], updateOrder);
     router.delete('/:id', [validateAdmin], deleteOrder);
