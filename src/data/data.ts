@@ -54,7 +54,7 @@ export const seed: InitialSeed = {
       dni: "123321123",
       fecha_nac: new Date("1989-12-29"),
       email: "admin@admin.com",
-      password: bcryptAdapter.hash("123456"),
+      password: bcryptAdapter.hash("admin"),
       telefono: "123456789",
       direccion: "Calle Falsa 123",
       rol: RolSeed.ADMIN
@@ -65,7 +65,7 @@ export const seed: InitialSeed = {
       dni: "234432234",
       fecha_nac: new Date("2000-08-28"),
       email: "user@user.com",
-      password: bcryptAdapter.hash("123456"),
+      password: bcryptAdapter.hash("user"),
       telefono: "123456789",
       direccion: "Calle Falsa 234",
       rol: RolSeed.USER

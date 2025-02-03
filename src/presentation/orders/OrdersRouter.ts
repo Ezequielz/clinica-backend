@@ -17,15 +17,14 @@ export const OrdersRoutes = (): Router => {
     } = OrdersController;
 
     const {
-        validateUser,
         validateUserForOrder,
         validateAdmin,
     } = AuthMiddleware;
 
 
     router.get('/', [validateAdmin], readOrders);
-    router.get('/:id', [validateUser], readOrderyId);
-    router.get('/ganancias',[ validateAdmin ], readGanancias);
+    router.post('/ganancias',[ validateAdmin ], readGanancias);
+    router.get('/:id', [validateUserForOrder], readOrderyId);
 
     router.patch('/:id', [validateUserForOrder], updateOrder);
     router.delete('/:id', [validateAdmin], deleteOrder);

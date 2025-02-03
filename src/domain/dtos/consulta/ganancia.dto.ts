@@ -9,7 +9,7 @@ export interface GananciasDTO {
 };
 
 const create = ({ gananciaData }: GananciasData): [string?, GananciasDTO?] => {
-
+// console.log(gananciaData)
     const {
         fecha_inicio,
         fecha_fin,

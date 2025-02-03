@@ -40,7 +40,7 @@ const readOrderyId = (req: Request, res: Response) => {
     OrdersService.readOrderById(id)
         .then(resp => {
 
-            if (!resp.paciente) throw CustomError.badRequest('No se encontró ninguna orden con esa id');
+            if (!resp) throw CustomError.badRequest('No se encontró ninguna orden con esa id');
             res.status(200).json(resp);
 
         })
@@ -51,7 +51,7 @@ const readOrderyId = (req: Request, res: Response) => {
 const readGanancias = (req: Request, res: Response) => {
 
     const body = req.body;
-
+console.log({body})
     const [error, ganancias] = gananciasDto.create({ gananciaData: body });
     if (error) {
         res.status(400).json({ ok: false, error });
