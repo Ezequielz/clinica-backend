@@ -104,7 +104,7 @@ const validateUserForOrder = async (req: Request, res: Response, next: NextFunct
     };
     try {
         if( user.rol !== Rol.ADMIN){
-            const order = await prisma.order.findUnique({
+            const order = await prisma.orderModel.findUnique({
                 where: {id}
             });
             if (!order) {

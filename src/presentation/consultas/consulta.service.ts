@@ -46,7 +46,7 @@ const createConsulta = async (consultaDTO: ConsultaDTO) => {
     try {
         const result = await prisma.$transaction(async (tx) => {
      
-            const order = await tx.order.create({
+            const order = await tx.orderModel.create({
                 data: {
                     monto_total: 0,
                     pacienteId: consultaDTO.pacienteId
@@ -77,7 +77,7 @@ const createConsulta = async (consultaDTO: ConsultaDTO) => {
             });
 
             // Actualizar la orden con la consulta y el precio
-            await tx.order.update({
+            await tx.orderModel.update({
                 where: { id: order.id },
                 data: {
                     consultas: { connect: { id: consulta.id } },
@@ -124,7 +124,7 @@ const createConsultasByPack = async (consultasPackDTO: ConsultasPackDTO) => {
 
 
     return await prisma.$transaction(async (tx) => {
-        const order = await tx.order.create({
+        const order = await tx.orderModel.create({
             data: {
                 monto_total: 0,
                 pacienteId: consultasPackDTO.pacienteId
@@ -193,7 +193,7 @@ const createConsultasByPack = async (consultasPackDTO: ConsultasPackDTO) => {
 
         const precioWithDiscount = paciente.obra_social ? paquete!.precio_paquete * 0.80 : paquete!.precio_paquete;
 
-        const orderUpdated= await tx.order.update({
+        const orderUpdated= await tx.orderModel.update({
             where: { id: order.id },
             data: {
                 consultas: { connect: createdConsultas.map(consulta => ({ id: consulta.id })) },

@@ -9,7 +9,7 @@ const paypalPayment = async (orderId: string) => {
         throw CustomError.badRequest('Missing orderId');
     };
     try {
-        const orderExist = await prisma.order.findFirst({
+        const orderExist = await prisma.orderModel.findFirst({
             where: {
                 OR: [{ id: orderId }, { id: { endsWith: orderId } }],
             },
@@ -76,7 +76,7 @@ const paypalcheckPayment = async (paypalTransactionId: string) => {
     };
 
     try {
-        const order = await prisma.order.update({
+        const order = await prisma.orderModel.update({
             where: { id: orderId },
             data: { pagado: true, pagadoAt: new Date() },
         });
