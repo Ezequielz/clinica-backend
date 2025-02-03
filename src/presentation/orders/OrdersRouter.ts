@@ -3,8 +3,6 @@ import { OrdersController } from './OrdersController';
 import { AuthMiddleware } from '../middlewares/auth.middleware';
 
 
-
-
 export const OrdersRoutes = (): Router => {
     const router = Router();
 
@@ -19,14 +17,15 @@ export const OrdersRoutes = (): Router => {
 
     const {
         validateUser,
-        validateAdmin
+        validateUserForOrder,
+        validateAdmin,
     } = AuthMiddleware;
 
 
     router.get('/', [validateAdmin], readOrders);
     router.get('/:id', [validateUser], readOrderyId);
 
-    router.patch('/:id', [validateAdmin], updateOrder);
+    router.patch('/:id', [validateUserForOrder], updateOrder);
     router.delete('/:id', [validateAdmin], deleteOrder);
 
 

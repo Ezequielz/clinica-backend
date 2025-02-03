@@ -3,8 +3,8 @@ import { paymentsService } from './paypal.service';
 import { handleError } from '../../helpers/handleError';
 
 const readPaypal = (req: Request, res: Response) => {
-    res.json('probando paypal api')
-}
+    res.json('probando paypal api');
+};
 const paypalCheckPayment = (req: Request, res: Response) => {
     const { paypalTransactionId } = req.body;
 

@@ -10,7 +10,6 @@ import { PaquetesRoutes } from './paquetes/PaquetesRouter';
 import { ConsultasRoutes } from './consultas/ConsultasRouter';
 import { AuthMiddleware } from './middlewares/auth.middleware';
 import { OrdersRoutes } from './orders/OrdersRouter';
-import { PaypalRoutes } from './payments/paypal/PaypalRouter';
 import { PaymentsRoutes } from './payments/PaymentsRouter';
 
 const {
