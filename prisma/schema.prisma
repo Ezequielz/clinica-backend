@@ -154,4 +154,6 @@ model Order {
   transactionId String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+
+  @@map("orders") 
 }
