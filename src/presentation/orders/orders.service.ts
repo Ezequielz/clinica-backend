@@ -32,7 +32,7 @@ import { GananciasDTO } from '../../domain/dtos/consulta/ganancia.dto';
 const readOrders = async () => {
 
     try {
-        const orders = await prisma.orderModel.findMany()
+        const orders = await prisma.order.findMany()
 
         return {
             ok: true,
@@ -52,7 +52,7 @@ const readOrders = async () => {
 const readOrderById = async (id: string) => {
 
     try {
-        const order = await prisma.orderModel.findUnique({
+        const order = await prisma.order.findUnique({
             where: {
                 id
             }
@@ -117,7 +117,7 @@ const readGanancias = async (gananciasDTO: GananciasDTO) => {
         }
 
         
-        const orders = await prisma.orderModel.findMany({
+        const orders = await prisma.order.findMany({
             where,
             select: {
                 monto_total: true,
@@ -144,7 +144,7 @@ const readGanancias = async (gananciasDTO: GananciasDTO) => {
 
 const updateOrder = async (orderUpdateDto: OrderUpdateDTO) => {
 
-    const order = await prisma.orderModel.findUnique({ where: { id: orderUpdateDto.id } });
+    const order = await prisma.order.findUnique({ where: { id: orderUpdateDto.id } });
     if (!order) throw CustomError.badRequest('Invalid Order Id');
 
     let pagadoAt;
@@ -154,7 +154,7 @@ const updateOrder = async (orderUpdateDto: OrderUpdateDTO) => {
 
     try {
 
-        const updatedOrder = await prisma.orderModel.update({
+        const updatedOrder = await prisma.order.update({
             where: {
                 id: orderUpdateDto.id
             },
@@ -184,7 +184,7 @@ const deleteOrder = async (id: string) => {
     if (!ok) throw CustomError.badRequest('Invalid ordern id');
 
     try {
-        const order = await prisma.orderModel.delete({
+        const order = await prisma.order.delete({
             where: {
                 id
             }
