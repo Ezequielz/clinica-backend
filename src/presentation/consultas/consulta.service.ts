@@ -41,11 +41,11 @@ const createConsulta = async (consultaDTO: ConsultaDTO) => {
     };
 
     const fullPrice = paquetePrice ? paquetePrice : servicio.precio;
-    const precioWhitDiscount = paciente.obra_social ? fullPrice * 0.85 : fullPrice;
+    const precioWhitDiscount = paciente.obra_social ? fullPrice * 0.80 : fullPrice;
 
     try {
         const result = await prisma.$transaction(async (tx) => {
-     
+
             const order = await tx.order.create({
                 data: {
                     monto_total: 0,
@@ -115,6 +115,18 @@ const createConsultasByPack = async (consultasPackDTO: ConsultasPackDTO) => {
     if (paquete!.servicios_incluidos.length !== paqueteDetails.length) {
         throw CustomError.badRequest(`la canidad de paquetes: ${paqueteDetails.length} no es válida para el paquete ${paqueteId} seleccionado: requiere ${paquete!.servicios_incluidos.length} paquetes`);
     };
+    // **Validación de servicios del paquete**  
+    const serviciosIncluidos = new Set(paquete!.servicios_incluidos.map(s => s.servicioId));
+    const serviciosPaqueteDetails = new Set(paqueteDetails.map(p => p.servicioId));
+
+    if (
+        [...serviciosIncluidos].some(servicio => !serviciosPaqueteDetails.has(servicio)) 
+    ) {
+        throw CustomError.badRequest(
+            `Los servicios proporcionados en el paquete no coinciden con los servicios permitidos (${[...serviciosIncluidos].join(", ")}).`
+        );
+    }
+
 
     // Validar paciente
     const { ok: existPaciente, paciente } = await checkExistPaciente(consultasPackDTO.pacienteId);
@@ -193,7 +205,7 @@ const createConsultasByPack = async (consultasPackDTO: ConsultasPackDTO) => {
 
         const precioWithDiscount = paciente.obra_social ? paquete!.precio_paquete * 0.80 : paquete!.precio_paquete;
 
-        const orderUpdated= await tx.order.update({
+        const orderUpdated = await tx.order.update({
             where: { id: order.id },
             data: {
                 consultas: { connect: createdConsultas.map(consulta => ({ id: consulta.id })) },

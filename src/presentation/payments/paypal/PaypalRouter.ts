@@ -10,10 +10,12 @@ export const PaypalRoutes = (): Router => {
         readPaypal,
         paypalCheckPayment,
         paypalPayment,
-       
+        downloadInvoice,
     } = PaypalController;
 
     router.get('/', readPaypal)    
+
+    router.get("/invoice/:id", downloadInvoice);
 
     router.post('/check-payment', paypalCheckPayment);
    

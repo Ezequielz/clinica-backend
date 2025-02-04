@@ -38,7 +38,7 @@ router.use('/consultas', [validateJWT], ConsultasRoutes());
 
 router.use('/orders', [validateJWT], OrdersRoutes());
 
-router.use('/payments', [validateJWT], PaymentsRoutes());
+router.use('/payments', PaymentsRoutes());
 
 
 

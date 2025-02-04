@@ -19,4 +19,8 @@ export const envs = {
   PAYPAL_OAUTH_URL: get('PAYPAL_OAUTH_URL').required().asString(),
   PAYPAL_ORDERS_URL: get('PAYPAL_ORDERS_URL').required().asString(),
 
+  CLOUDINARY_CLOUD_NAME: get('CLOUDINARY_CLOUD_NAME').required().asString(),
+  CLOUDINARY_API_KEY: get('CLOUDINARY_API_KEY').required().asString(),
+  CLOUDINARY_API_SECRET: get('CLOUDINARY_API_SECRET').required().asString(),
+
 }
