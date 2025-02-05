@@ -17,6 +17,7 @@ interface ServicioSeed {
   codigo_servicio: string;
   nombre: string;
   descripcion: string;
+  imagen?: string;
   precio: number;
 }
 
@@ -740,6 +741,7 @@ export const seed: InitialSeed = {
   servicios: [
     {
       codigo_servicio: "1",
+      imagen: 'https://res.cloudinary.com/zapataezequiel/image/upload/v1738713305/clinica/cardiologia.webp',
       nombre: "Cardiología",
       descripcion: 'Consulta especializada en cardiología para diagnóstico y tratamiento de enfermedades del corazón.',
       precio: 1500
@@ -747,6 +749,7 @@ export const seed: InitialSeed = {
 
     {
       codigo_servicio: "2",
+      imagen: 'https://res.cloudinary.com/zapataezequiel/image/upload/v1738713305/clinica/cardiologia.webp',
       nombre: "Pediatría",
       descripcion: "Atención médica para niños",
       precio: 1200
@@ -754,6 +757,7 @@ export const seed: InitialSeed = {
 
     {
       codigo_servicio: "3",
+      imagen: 'https://res.cloudinary.com/zapataezequiel/image/upload/v1738713305/clinica/cardiologia.webp',
       nombre: "Dermatología",
       descripcion: "Especialidad de la piel",
       precio: 1400
@@ -761,84 +765,98 @@ export const seed: InitialSeed = {
 
     {
       codigo_servicio: '4',
+      imagen: 'https://res.cloudinary.com/zapataezequiel/image/upload/v1738713305/clinica/cardiologia.webp',
       nombre: 'Consulta General',
       descripcion: 'Consulta médica general para evaluación de salud básica.',
       precio: 1500,
     },
     {
       codigo_servicio: '5',
+      imagen: 'https://res.cloudinary.com/zapataezequiel/image/upload/v1738713305/clinica/cardiologia.webp',
       nombre: 'Neurología',
       descripcion: 'Consulta especializada para tratar problemas neurológicos como migrañas o trastornos del sistema nervioso.',
       precio: 3500,
     },
     {
       codigo_servicio: '6',
+      imagen: 'https://res.cloudinary.com/zapataezequiel/image/upload/v1738713305/clinica/cardiologia.webp',
       nombre: 'Ginecología',
       descripcion: 'Consulta especializada en ginecología para el cuidado de la salud femenina.',
       precio: 3200,
     },
     {
       codigo_servicio: '7',
+      imagen: 'https://res.cloudinary.com/zapataezequiel/image/upload/v1738713305/clinica/cardiologia.webp',
       nombre: 'Análisis de Sangre',
       descripcion: 'Examen médico para evaluar el estado general de salud a través de muestras de sangre.',
       precio: 2500,
     },
     {
       codigo_servicio: '8',
+      imagen: 'https://res.cloudinary.com/zapataezequiel/image/upload/v1738713305/clinica/cardiologia.webp',
       nombre: 'Terapia Física',
       descripcion: 'Rehabilitación para mejorar la movilidad y aliviar el dolor en lesiones musculoesqueléticas.',
       precio: 4000,
     },
     {
       codigo_servicio: '9',
+      imagen: 'https://res.cloudinary.com/zapataezequiel/image/upload/v1738713305/clinica/cardiologia.webp',
       nombre: 'Terapia Ocupacional',
       descripcion: 'Intervención para mejorar habilidades motoras y cognitivas en la vida diaria.',
       precio: 3800,
     },
     {
       codigo_servicio: '10',
+      imagen: 'https://res.cloudinary.com/zapataezequiel/image/upload/v1738713305/clinica/cardiologia.webp',
       nombre: 'Tratamiento de Rehabilitación Cardíaca',
       descripcion: 'Programa para mejorar la recuperación tras eventos cardíacos como infartos.',
       precio: 5000,
     },
     {
       codigo_servicio: '11',
+      imagen: 'https://res.cloudinary.com/zapataezequiel/image/upload/v1738713305/clinica/cardiologia.webp',
       nombre: 'Tratamiento para el Dolor Crónico',
       descripcion: 'Manejo del dolor persistente con técnicas médicas y terapéuticas avanzadas.',
       precio: 4500,
     },
     {
       codigo_servicio: '12',
+      imagen: 'https://res.cloudinary.com/zapataezequiel/image/upload/v1738713305/clinica/cardiologia.webp',
       nombre: 'Radiografía',
       descripcion: 'Examen médico de diagnóstico mediante radiografía para detectar problemas óseos o de tejidos internos.',
       precio: 3500,
     },
     {
       codigo_servicio: '13',
+      imagen: 'https://res.cloudinary.com/zapataezequiel/image/upload/v1738713305/clinica/cardiologia.webp',
       nombre: 'Ecografía',
       descripcion: 'Examen médico de diagnóstico mediante ecografía para obtener imágenes de órganos internos.',
       precio: 4000,
     },
     {
       codigo_servicio: '14',
+      imagen: 'https://res.cloudinary.com/zapataezequiel/image/upload/v1738713305/clinica/cardiologia.webp',
       nombre: 'Terapia Psicológica',
       descripcion: 'Tratamiento psicológico para trastornos emocionales y psicológicos.',
       precio: 3500,
     },
     {
       codigo_servicio: '15',
+      imagen: 'https://res.cloudinary.com/zapataezequiel/image/upload/v1738713305/clinica/cardiologia.webp',
       nombre: 'Cirugía General',
       descripcion: 'Procedimientos quirúrgicos para tratar diversas patologías con técnicas avanzadas.',
       precio: 15000,
     },
     {
       codigo_servicio: '16',
+      imagen: 'https://res.cloudinary.com/zapataezequiel/image/upload/v1738713305/clinica/cardiologia.webp',
       nombre: 'Cirugía Plástica',
       descripcion: 'Intervenciones quirúrgicas estéticas y reconstructivas para mejorar la apariencia y funcionalidad.',
       precio: 25000,
     },
     {
       codigo_servicio: '17',
+      imagen: 'https://res.cloudinary.com/zapataezequiel/image/upload/v1738713305/clinica/cardiologia.webp',
       nombre: 'Cirugía Laparoscópica',
       descripcion: 'Procedimientos mínimamente invasivos para diversas condiciones médicas.',
       precio: 18000,

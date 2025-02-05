@@ -11,6 +11,7 @@ import { ConsultasRoutes } from './consultas/ConsultasRouter';
 import { AuthMiddleware } from './middlewares/auth.middleware';
 import { OrdersRoutes } from './orders/OrdersRouter';
 import { PaymentsRoutes } from './payments/PaymentsRouter';
+import { InfoRoutes } from './info/InfoRouter';
 
 const {
     validateJWT,
@@ -27,6 +28,8 @@ router.use('/auth', AuthRoutes());
 router.use('/medical-services', MedicalSpecialitiesRoutes());
 
 router.use('/paquetes', PaquetesRoutes());
+
+router.use('/info', InfoRoutes());
 
 router.use('/users', [validateJWT], UsersRoutes());
 

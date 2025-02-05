@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { paymentsService } from './paypal.service';
 import { handleError } from '../../helpers/handleError';
-import { generatePDF } from '../../helpers/generatePDF';
 import { CustomError } from '../../helpers/custom.error';
 
 const readPaypal = (req: Request, res: Response) => {
