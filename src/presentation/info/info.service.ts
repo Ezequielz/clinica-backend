@@ -14,10 +14,12 @@ const readInfo = async () => {
 
         return {
             ok: true,
-            serviciosMedicos,
-            pacientes,
-            medicos,
-            paquetes,
+            info: {
+                serviciosMedicos,
+                pacientes,
+                medicos,
+                paquetes,
+            },
         };
 
     } catch (error: any) {
