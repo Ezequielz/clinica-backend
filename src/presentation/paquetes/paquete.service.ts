@@ -154,6 +154,7 @@ const readPaqueteByCode = async (code: string) => {
                         servicio: {
                             select: {
                                 nombre: true,
+                                codigo_servicio: true,
                                 precio: true,
                                 descripcion: true,
                                 medicos: {

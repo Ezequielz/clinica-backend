@@ -12,6 +12,7 @@ import { AuthMiddleware } from './middlewares/auth.middleware';
 import { OrdersRoutes } from './orders/OrdersRouter';
 import { PaymentsRoutes } from './payments/PaymentsRouter';
 import { InfoRoutes } from './info/InfoRouter';
+import { TurnosReservadosRoutes } from './turnos-reservados/TurnosReservadosRoutes';
 
 const {
     validateJWT,
@@ -40,6 +41,8 @@ router.use('/medicos', [validateJWT], MedicosRoutes());
 router.use('/consultas', [validateJWT], ConsultasRoutes());
 
 router.use('/orders', [validateJWT], OrdersRoutes());
+
+router.use('/turnos-reservados', [validateJWT], TurnosReservadosRoutes());
 
 router.use('/payments', PaymentsRoutes());
 

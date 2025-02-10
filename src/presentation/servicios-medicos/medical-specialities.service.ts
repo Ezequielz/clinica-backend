@@ -46,9 +46,16 @@ const readMedicalSpecialities = async (id?: string) => {
             include: {
                 Consulta: true,
                 medicos: {
-                    include:{
-                        turnos: true
+
+                  select: {
+                    user: {
+                        select: {
+                            nombre: true,
+                            apellido: true,
+                        }
                     },
+                    turnos: true
+                  }
 
                  
                 }
