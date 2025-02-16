@@ -51,7 +51,23 @@ const registerUser = async (registerUserDto: UserDTO) => {
 const loginUser = async (loginUserDTO: LoginUserDTO) => {
 
 
-  const user = await prisma.user.findUnique({ where: { email: loginUserDTO.email } });
+  const user = await prisma.user.findUnique(
+    {
+      where:
+        { email: loginUserDTO.email },
+      include:
+      {
+
+        paciente: {
+          select: {
+            id_paciente: true,
+            obra_social: true,
+          }
+        }
+      }
+    }
+
+  );
   if (!user) throw CustomError.badRequest('Invalid Credentials');
 
   const isMatching = bcryptAdapter.compare(loginUserDTO.password, user.password);

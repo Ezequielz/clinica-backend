@@ -18,8 +18,10 @@ export interface UserDTO {
     direccion?: string;
 
 };
-export interface UserUpdateDTO extends Partial<UserDTO> {
+export interface UserUpdateDTO extends Partial<Omit<UserDTO, 'email'>> {
     id: string;
+    obra_social?: boolean;
+    imagen?: string;
 };
 
 
@@ -66,13 +68,14 @@ const update = ({ userData }: UserData): [string?, UserUpdateDTO?] => {
         id,
         nombre,
         apellido,
-        email,
         password,
         rol,
         dni,
+        imagen,
         fecha_nac,
         telefono,
         direccion,
+        obra_social,
     } = userData;
 
     if (!id) return ['Missing id'];
@@ -82,19 +85,22 @@ const update = ({ userData }: UserData): [string?, UserUpdateDTO?] => {
     };
 
 
-
-    return [undefined, {
+    const filteredUserData: UserUpdateDTO = {
         id,
-        nombre,
-        apellido,
-        email,
-        password,
-        rol: normalizedRol,
-        dni,
-        fecha_nac,
-        telefono,
-        direccion,
-    }];
+        ...(nombre && nombre !== '' && { nombre }),
+        ...(apellido && apellido !== '' && { apellido }),
+        ...(password && password !== '' && { password }),
+        ...(rol && rol !== '' && { rol: normalizedRol }),
+        ...(dni && dni !== '' && { dni }),
+        ...(imagen && imagen !== '' && { imagen }),
+        ...(fecha_nac && fecha_nac !== '' && { fecha_nac }),
+        ...(telefono && telefono !== '' && { telefono }),
+        ...(direccion && direccion !== '' && { direccion }),
+        ...(obra_social !== undefined && { obra_social }),
+    };
+
+
+    return [undefined, filteredUserData];
 };
 
 

@@ -6,7 +6,7 @@ export interface ConsultaDTO {
 
     fecha_consulta: string;
     hora_consulta: string;
-    pacienteId: string;
+    userId: string;
     medicoId: string;
     servicioId?: string;
     paqueteId?: string;
@@ -25,7 +25,7 @@ const create = ({ consultaData }: ConsultaData): [string?, ConsultaDTO?] => {
     const {
         fecha_consulta,
         hora_consulta,
-        pacienteId,
+        userId,
         medicoId,
         servicioId,
         paqueteId,
@@ -45,7 +45,7 @@ const create = ({ consultaData }: ConsultaData): [string?, ConsultaDTO?] => {
     if (!horaRegex.test(hora_consulta)) {
         return ['La hora debe tener el formato "HH:mm", por ejemplo "10:00"'];
     };
-    if (!pacienteId) return ['Missing pacienteId'];
+    if (!userId) return ['Missing userId'];
     if (!medicoId) return ['Missing medicoId'];
 
 
@@ -53,7 +53,7 @@ const create = ({ consultaData }: ConsultaData): [string?, ConsultaDTO?] => {
     return [undefined, {
         fecha_consulta,
         hora_consulta,
-        pacienteId,
+        userId,
         medicoId,
         servicioId,
         paqueteId,

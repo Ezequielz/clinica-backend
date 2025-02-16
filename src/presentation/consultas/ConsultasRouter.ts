@@ -25,7 +25,7 @@ export const ConsultasRoutes = (): Router => {
 
     router.get('/',[ validateAdmin ], readConsultas);
 
-    router.get('/:id', [validateUserForConsulta], readConsultaById);
+    router.get('/:id', readConsultaById);
     
     router.post('/', createConsulta);
     router.post('/:code', createConsultasByPack);

@@ -6,14 +6,12 @@ import { consultasPackDto } from '../../domain/dtos/consulta/consultasPack.dto';
 import { CustomError } from '../helpers/custom.error';
 
 const createConsultasByPack = (req: Request, res: Response) => {
-
     const { code } = req.params;
     const body = req.body;
-    const pacienteId = req.body.user.paciente.id_paciente;
+
     const [error, consulta] = consultasPackDto.create({
         consultaData: {
             ...body,
-            pacienteId,
             paqueteId: code.toUpperCase(),
             servicioId: null
         }
@@ -28,14 +26,12 @@ const createConsultasByPack = (req: Request, res: Response) => {
         .catch((error) => handleError(error, res));
 };
 const createConsulta = (req: Request, res: Response) => {
-
     const body = req.body;
-    const pacienteId = req.body.user.paciente.id_paciente;
+    
     const [error, consulta] = consultaDto.create({
         consultaData: {
             ...body,
             paqueteId: null,
-            pacienteId,
         }
     });
     if (error) {
@@ -52,7 +48,6 @@ const readConsultas = (req: Request, res: Response) => {
         .catch((error) => handleError(error, res));
 };
 const readConsultaById = (req: Request, res: Response) => {
-
     const { id } = req.params;
     ConsultasService.readConsultaById(id)
         .then(resp => {
@@ -64,7 +59,6 @@ const readConsultaById = (req: Request, res: Response) => {
         .catch((error) => handleError(error, res));
 };
 const updateConsulta = (req: Request, res: Response) => {
-
     const { id } = req.params;
     const body = req.body
     const [error, consulta] = consultaDto.update({ consultaData: { ...body, id } });
@@ -81,7 +75,6 @@ const updateConsulta = (req: Request, res: Response) => {
         .catch((error) => handleError(error, res));
 };
 const deleteConsulta = (req: Request, res: Response) => {
-
     const { id } = req.params;
 
     ConsultasService.deleteConsulta(id)

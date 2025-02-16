@@ -26,7 +26,9 @@ const readUserById = (req: Request, res: Response) => {
 const updateUser = (req: Request, res: Response) => {
     const { id } = req.params;
     const body = req.body
+ 
     const [error, user] = userDto.update({ userData: { id, ...body } });
+
     if (error) {
 
         res.status(400).json({ ok: false, error });

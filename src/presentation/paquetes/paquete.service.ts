@@ -153,6 +153,7 @@ const readPaqueteByCode = async (code: string) => {
                     include: {
                         servicio: {
                             select: {
+                                id: true,
                                 nombre: true,
                                 codigo_servicio: true,
                                 precio: true,
@@ -160,12 +161,7 @@ const readPaqueteByCode = async (code: string) => {
                                 medicos: {
                                     select: {
                                         id_medico: true,
-                                        turnos: {
-                                            omit: {
-                                                medicoId: true,
-                                                id_turno: true,
-                                            }
-                                        },
+                                        turnos: true,
                                         user: {
                                             select: {
                                                 nombre: true,

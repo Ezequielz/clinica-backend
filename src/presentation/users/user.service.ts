@@ -76,23 +76,36 @@ const readUserById = async (id: string) => {
 
 
 const updateUser = async (userUpdateDTO: UserUpdateDTO) => {
-  const { id, password, ...rest } = userUpdateDTO;
+  const { id, password, fecha_nac, obra_social, ...rest } = userUpdateDTO;
+
 
   const hashedPassword = password ? await bcryptAdapter.hash(password) : undefined;
+  const fechaToDate = fecha_nac ? new Date(fecha_nac) : undefined
 
   try {
-    const user = await prisma.user.update({
-      where: { id },
-      data: {
-        ...rest,
-        ...(hashedPassword && { password: hashedPassword }),
-      },
+    const result = await prisma.$transaction(async (prisma) => {
+      const paciente = await prisma.paciente.update({
+        where: { userId: id },
+        data: { obra_social },
+      });
+
+      const user = await prisma.user.update({
+        where: { id },
+        data: {
+          ...rest,
+          ...(hashedPassword && { password: hashedPassword }),
+          ...(fechaToDate && { fecha_nac: fechaToDate }),
+        },
+      });
+
+      return { user, paciente };
     });
 
     return {
       ok: true,
-      user,
+      user: result.user,
     };
+
   } catch (error: any) {
     console.error(error);
 

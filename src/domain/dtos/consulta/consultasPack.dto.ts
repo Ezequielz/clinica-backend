@@ -3,7 +3,7 @@ interface ConsultaData {
     consultaData: { [key: string]: any };
 };
 export interface ConsultasPackDTO {
-    pacienteId: string;
+    userId: string;
     paqueteId?: string;
     paqueteDetails: PaqueteDetails[];
 };
@@ -21,12 +21,12 @@ const horaRegex = /^\d{2}:\d{2}$/;
 const create = ({ consultaData }: ConsultaData): [string?, ConsultasPackDTO?] => {
 
     const {
-        pacienteId,
+        userId,
         paqueteId,
         paqueteDetails,
     } = consultaData;
 
-    if (!pacienteId) return ['Missing pacienteId'];
+    if (!userId) return ['Missing userId'];
     if (!paqueteDetails) return ['Missing paqueteDetails'];
     if (!Array.isArray(paqueteDetails)) return ['paqueteDetails debe ser un array'];
     if (paqueteDetails.length === 0) return ['paqueteDetails no puede ser un Array vacio'];
@@ -46,7 +46,7 @@ const create = ({ consultaData }: ConsultaData): [string?, ConsultasPackDTO?] =>
         }
     }
     return [undefined, {
-        pacienteId,
+        userId,
         paqueteId,
         paqueteDetails,
 

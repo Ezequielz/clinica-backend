@@ -13,7 +13,7 @@ export const TurnosReservadosRoutes = (): Router => {
     // rutas 
 
 
-    router.get('/',  readTurnosReservadosByMedic);
+    router.post('/',  readTurnosReservadosByMedic);
 
 
     return router;

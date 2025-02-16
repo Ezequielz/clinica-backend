@@ -55,6 +55,40 @@ const readOrderById = async (id: string) => {
         const order = await prisma.order.findUnique({
             where: {
                 id
+            },
+            include: {
+                consultas: {
+                    include: {
+                        medico: {
+                            select: {
+                                user: {
+                                    select: {
+                                        nombre: true,
+                                        apellido: true,
+                                    }
+                                }
+                            },
+
+                        },
+                        servicio: {
+                            select: {
+                                nombre: true,
+                                codigo_servicio: true,
+                                precio: true,
+
+                            }
+                        },
+                        paquete: {
+                            select: {
+                                nombre: true,
+                                precio_paquete: true,
+                                codigo_paquete: true,
+                            }
+                        }
+
+                    }
+                },
+
             }
         });
 
@@ -116,7 +150,7 @@ const readGanancias = async (gananciasDTO: GananciasDTO) => {
             where.consultas.some.paqueteId = null;
         }
 
-        
+
         const orders = await prisma.order.findMany({
             where,
             select: {
@@ -124,7 +158,7 @@ const readGanancias = async (gananciasDTO: GananciasDTO) => {
             },
         });
 
-   
+
         const totalGanancias = orders.reduce((acc, order) => acc + order.monto_total, 0);
 
         return {
@@ -143,12 +177,12 @@ const readGanancias = async (gananciasDTO: GananciasDTO) => {
 
 
 const updateOrder = async (orderUpdateDto: OrderUpdateDTO) => {
-    console.log({orderUpdateDto})
+    console.log({ orderUpdateDto })
     const order = await prisma.order.findUnique({ where: { id: orderUpdateDto.id } });
     if (!order) throw CustomError.badRequest('Invalid Order Id');
 
     let pagadoAt;
-    if(orderUpdateDto.pagado) {
+    if (orderUpdateDto.pagado) {
         pagadoAt = new Date()
     }
 
@@ -158,7 +192,8 @@ const updateOrder = async (orderUpdateDto: OrderUpdateDTO) => {
             where: {
                 id: orderUpdateDto.id
             },
-            data: {...orderUpdateDto,
+            data: {
+                ...orderUpdateDto,
                 pagadoAt: pagadoAt
             }
         });

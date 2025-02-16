@@ -101,7 +101,6 @@ const paypalcheckPayment = async (paypalTransactionId: string) => {
 };
 
 
-
 const generatePDF = async (id: string) => {
     try {
         const order = await prisma.order.findFirst({

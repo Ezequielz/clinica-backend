@@ -10,13 +10,17 @@ import { ConsultasPackDTO } from '../../domain/dtos/consulta/consultasPack.dto';
 import type { ConsultaUpdateDTO, ConsultaDTO } from '../../domain/dtos/consulta/consulta.dto';
 import { checkExistConsulta } from '../helpers/checkExistConsulta';
 import { checkServiceOfMedic } from '../helpers/checkServiceOfMedic';
+import { getPacienteByUserId } from '../helpers/getPacienteByUserId';
 
 const createConsulta = async (consultaDTO: ConsultaDTO) => {
 
-    const { paquetePrice, ...rest } = consultaDTO;
+    const { paquetePrice, userId, ...rest } = consultaDTO;
 
     const { servicioId, medicoId, fecha_consulta, hora_consulta } = rest;
-
+    const { ok: pacienteResp, paciente } = await getPacienteByUserId(userId);
+    if (!pacienteResp || !paciente) {
+        throw CustomError.badRequest(`No se puedo encontrar al paciente con userId: ${userId}`);
+    };
     const { ok: existServicio, servicio } = await checkExistCodigo_servicio(servicioId!);
 
     if (!existServicio || !servicio) {
@@ -29,10 +33,10 @@ const createConsulta = async (consultaDTO: ConsultaDTO) => {
         throw CustomError.badRequest(`El médico con id: ${consultaDTO.medicoId} no está asociado al servicio ${servicio?.nombre}`);
     };
 
-    const { ok: existPaciente, paciente } = await checkExistPaciente(consultaDTO.pacienteId)
-    if (!existPaciente || !paciente) {
-        throw CustomError.badRequest(`No se puedo encontrar al paciente con id: ${consultaDTO.pacienteId}`);
-    };
+    // const { ok: existPaciente, paciente } = await checkExistPaciente(consultaDTO.pacienteId)
+    // if (!existPaciente || !paciente) {
+    //     throw CustomError.badRequest(`No se puedo encontrar al paciente con id: ${consultaDTO.pacienteId}`);
+    // };
 
 
     const { ok, msg, turno, fecha } = await checkTurnoAvailableForMedic({ fecha_consulta, hora_consulta, medicoId });
@@ -49,7 +53,7 @@ const createConsulta = async (consultaDTO: ConsultaDTO) => {
             const order = await tx.order.create({
                 data: {
                     monto_total: 0,
-                    pacienteId: consultaDTO.pacienteId
+                    pacienteId: paciente.id_paciente
                 }
             });
 
@@ -58,6 +62,7 @@ const createConsulta = async (consultaDTO: ConsultaDTO) => {
             const consulta = await tx.consulta.create({
                 data: {
                     ...rest,
+                    pacienteId: paciente.id_paciente,
                     medicoId: medicoForThisService.id_medico,
                     fecha_consulta: fecha,
                     orderId: order.id
@@ -70,7 +75,7 @@ const createConsulta = async (consultaDTO: ConsultaDTO) => {
                     fecha_turno: fecha,
                     hora_turno: hora_consulta,
                     medicoId: medicoForThisService.id_medico,
-                    pacienteId: consultaDTO.pacienteId,
+                    pacienteId: paciente.id_paciente,
                     turnoId: turno.id_turno,
                     consultaId: consulta.id,
                 }
@@ -104,12 +109,17 @@ const createConsulta = async (consultaDTO: ConsultaDTO) => {
 };
 
 const createConsultasByPack = async (consultasPackDTO: ConsultasPackDTO) => {
-    const { paqueteId, paqueteDetails, ...rest } = consultasPackDTO;
+    const { paqueteId, paqueteDetails, userId, ...rest } = consultasPackDTO;
 
     const { ok: existPaquete, paquete } = await checkExistPaquete(paqueteId!);
     if (!existPaquete) {
 
         throw CustomError.badRequest(`codigo de paquete: ${paqueteId} inválido, no existente`);
+    };
+    // Validar paciente
+    const { ok: pacienteResp, paciente } = await getPacienteByUserId(userId);
+    if (!pacienteResp || !paciente) {
+        throw CustomError.badRequest(`No se puedo encontrar al paciente con userId: ${userId}`);
     };
 
     if (paquete!.servicios_incluidos.length !== paqueteDetails.length) {
@@ -120,7 +130,7 @@ const createConsultasByPack = async (consultasPackDTO: ConsultasPackDTO) => {
     const serviciosPaqueteDetails = new Set(paqueteDetails.map(p => p.servicioId));
 
     if (
-        [...serviciosIncluidos].some(servicio => !serviciosPaqueteDetails.has(servicio)) 
+        [...serviciosIncluidos].some(servicio => !serviciosPaqueteDetails.has(servicio))
     ) {
         throw CustomError.badRequest(
             `Los servicios proporcionados en el paquete no coinciden con los servicios permitidos (${[...serviciosIncluidos].join(", ")}).`
@@ -128,18 +138,14 @@ const createConsultasByPack = async (consultasPackDTO: ConsultasPackDTO) => {
     }
 
 
-    // Validar paciente
-    const { ok: existPaciente, paciente } = await checkExistPaciente(consultasPackDTO.pacienteId);
-    if (!existPaciente || !paciente) {
-        throw CustomError.badRequest(`No se pudo encontrar al paciente con id: ${consultasPackDTO.pacienteId}`);
-    };
+
 
 
     return await prisma.$transaction(async (tx) => {
         const order = await tx.order.create({
             data: {
                 monto_total: 0,
-                pacienteId: consultasPackDTO.pacienteId
+                pacienteId: paciente.id_paciente,
             }
         });
 
@@ -176,7 +182,7 @@ const createConsultasByPack = async (consultasPackDTO: ConsultasPackDTO) => {
             const consulta = await tx.consulta.create({
                 data: {
                     ...servicio,
-                    pacienteId: consultasPackDTO.pacienteId,
+                    pacienteId: paciente.id_paciente,
                     paqueteId,
                     medicoId: medicoForThisService.id_medico,
                     fecha_consulta: fecha,
@@ -190,7 +196,7 @@ const createConsultasByPack = async (consultasPackDTO: ConsultasPackDTO) => {
                     fecha_turno: fecha,
                     hora_turno: hora_consulta,
                     medicoId: medicoForThisService.id_medico,
-                    pacienteId: consultaDTO.pacienteId,
+                    pacienteId: paciente.id_paciente,
                     turnoId: turno.id_turno,
                     consultaId: consulta.id
                 },
@@ -244,6 +250,8 @@ const readConsultas = async () => {
 };
 
 const readConsultaById = async (id: string) => {
+    const { paciente } = await getPacienteByUserId(id);
+    const pacienteId = paciente ? paciente.id_paciente : undefined;
 
     try {
 
@@ -252,7 +260,7 @@ const readConsultaById = async (id: string) => {
                 OR: [
                     { id },
                     { medicoId: id },
-                    { pacienteId: id }
+                    { pacienteId },
                 ]
             },
             include: {
@@ -282,6 +290,26 @@ const readConsultaById = async (id: string) => {
                             }
                         }
 
+                    }
+                },
+                servicio: {
+                    select: {
+                        nombre: true,
+                    }
+                },
+                medico: {
+                    select: {
+                        user: {
+                            select: {
+                                nombre: true,
+                                apellido: true,
+                            }
+                        }
+                    }
+                },
+                order: {
+                    select: {
+                        pagado: true,
                     }
                 }
             }

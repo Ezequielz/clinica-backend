@@ -48,6 +48,7 @@ const readMedicalSpecialities = async (id?: string) => {
                 medicos: {
 
                   select: {
+                    id_medico: true,
                     user: {
                         select: {
                             nombre: true,

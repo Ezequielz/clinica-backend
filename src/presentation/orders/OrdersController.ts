@@ -39,7 +39,7 @@ const readOrderyId = (req: Request, res: Response) => {
 
     OrdersService.readOrderById(id)
         .then(resp => {
-
+            
             if (!resp) throw CustomError.badRequest('No se encontró ninguna orden con esa id');
             res.status(200).json(resp);
 
