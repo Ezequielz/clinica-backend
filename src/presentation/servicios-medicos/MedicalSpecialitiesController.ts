@@ -13,7 +13,6 @@ const createMedicalSpeciality = (req: Request, res: Response) => {
         res.status(400).json({ ok: false, error });
         return;
     };
-
     MedicalSpecialitiesService.createMedicalSpeciality(medicalSpeciality!)
         .then(resp => res.status(200).json(resp))
         .catch((error) => handleError(error, res));
@@ -31,14 +30,15 @@ const readMedicalSpecialities = (req: Request, res: Response) => {
 
 const updateMedicalSpeciality = (req: Request, res: Response) => {
     const { id } = req.params;
-    const { codigo_servicio, nombre, descripcion, precio } = req.body;
+    
+    const { nombre, descripcion, precio, imagen } = req.body;
 
     const updateMedicalSpeciality: MedicalSpecialityUpdateDTO = {
         id,
-        codigo_servicio,
         nombre,
         descripcion,
-        precio
+        precio,
+        imagen,
     };
 
 
@@ -47,7 +47,7 @@ const updateMedicalSpeciality = (req: Request, res: Response) => {
         res.status(400).json({ ok: false, error });
         return;
     };
-
+  
     MedicalSpecialitiesService.updateMedicalSpeciality(medicalSpeciality!)
         .then(resp => res.status(200).json(resp))
         .catch((error) => handleError(error, res));

@@ -16,7 +16,6 @@ const create = ({ gananciaData }: GananciasData): [string?, GananciasDTO?] => {
         typo,
     } = gananciaData;
 
-    if (!fecha_inicio) return ['Missing fecha_inicio'];
     if (typo && typo !== 'servicio' && typo !== 'pack')return ['typo solo puede ser "servicio" o "pack"'];
 
     return [undefined, {

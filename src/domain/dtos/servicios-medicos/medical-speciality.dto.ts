@@ -8,15 +8,16 @@ export interface MedicalSpecialityDTO {
     nombre: string;
     descripcion: string;
     precio: number;
+    imagen?: string
 };
 
-export interface MedicalSpecialityUpdateDTO extends Partial<MedicalSpecialityDTO> {
+export interface MedicalSpecialityUpdateDTO extends Omit<Partial<MedicalSpecialityDTO>, 'codigo_servicio'> {
     id: string;
-};
+}
 
 const create = ({ medicalSpecialityData }: MedicalSpecialityData): [string?, MedicalSpecialityDTO?] => {
 
-    const { codigo_servicio, nombre, descripcion, precio } = medicalSpecialityData;
+    const { codigo_servicio, nombre, descripcion, precio, imagen } = medicalSpecialityData;
 
     if (!codigo_servicio) return ['Missing codigo_servicio'];
     if (!nombre) return ['Missing nombre'];
@@ -27,17 +28,18 @@ const create = ({ medicalSpecialityData }: MedicalSpecialityData): [string?, Med
         codigo_servicio,
         nombre,
         descripcion,
-        precio
+        precio: +precio,
+        imagen
     }];
 
 };
 
 const update = ({ medicalSpecialityData }: MedicalSpecialityData): [string?, MedicalSpecialityUpdateDTO?] => {
 
-    const { codigo_servicio, nombre, descripcion, precio, id } = medicalSpecialityData;
+    const { nombre, descripcion, precio, imagen, id } = medicalSpecialityData;
 
 
-    return [undefined, { codigo_servicio, nombre, descripcion, precio, id }];
+    return [undefined, { nombre, descripcion,  precio: +precio, imagen, id }];
 
 };
 

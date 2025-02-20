@@ -51,7 +51,6 @@ const readOrderyId = (req: Request, res: Response) => {
 const readGanancias = (req: Request, res: Response) => {
 
     const body = req.body;
-console.log({body})
     const [error, ganancias] = gananciasDto.create({ gananciaData: body });
     if (error) {
         res.status(400).json({ ok: false, error });

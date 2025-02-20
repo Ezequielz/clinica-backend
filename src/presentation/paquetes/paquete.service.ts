@@ -8,7 +8,7 @@ import { checkExistPaquete } from '../helpers/checkExistPaquete';
 
 const createPaquete = async (paqueteDTO: PaqueteDTO) => {
 
-    const { serviciosCodes, codigo_paquete, nombre } = paqueteDTO;
+    const { serviciosCodes, codigo_paquete, nombre, imagen, } = paqueteDTO;
     for (const codigo of paqueteDTO.serviciosCodes) {
         const {ok} = await checkExistCodigo_servicio(codigo);
         if (!ok) {
@@ -41,6 +41,7 @@ const createPaquete = async (paqueteDTO: PaqueteDTO) => {
         const paquete = await prisma.paquete.create({
             data: {
                 nombre,
+                imagen,
                 codigo_paquete: codigo_paquete.toUpperCase(),
                 precio_paquete: precioWhitDicount
             }
@@ -203,56 +204,19 @@ const readPaqueteByCode = async (code: string) => {
 };
 
 const updatePaquete = async (paqueteUpdateDTO: PaqueteUpdateDTO) => {
-    const { id, serviciosCodes, codigo_paquete, ...rest } = paqueteUpdateDTO;
+    const { id, ...rest } = paqueteUpdateDTO;
 
     const existPaquete = await checkExistPaquete(id);
     if (!existPaquete) throw CustomError.badRequest(`no se encontro paquete con id ${id}`);
 
-    if (paqueteUpdateDTO.codigo_paquete) {
-        const { paquete } = await readPaqueteByCode(paqueteUpdateDTO.codigo_paquete)
-        if (paquete && paquete.id !== id) {
-            throw CustomError.badRequest(`Ya existe otro paquete con el codigo ${paqueteUpdateDTO.codigo_paquete}`);
-        }
-
-        paqueteUpdateDTO.codigo_paquete = paqueteUpdateDTO.codigo_paquete.toUpperCase()
-    };
-
-    if (paqueteUpdateDTO.serviciosCodes) {
-        for (const codigo of paqueteUpdateDTO.serviciosCodes) {
-            const {ok} = await checkExistCodigo_servicio(codigo);
-            if (!ok) {
-                throw CustomError.badRequest(`Código de servicio: ${codigo} inválido, no existente`);
-            }
-        }
-
-    }
-
     try {
-
-        let precioWhitDicount = undefined;
-        if (serviciosCodes) {
-
-            const { totalPrice } = await calculateDiscountedPrice(serviciosCodes);
-            if (!totalPrice) {
-                throw CustomError.internalServer(`Error al calcular el precio total de los servicios`);
-            }
-            precioWhitDicount = totalPrice
-        }
 
         const paqueteUpdated = await prisma.paquete.update({
             where: { id },
             data: {
                 ...rest,
-                codigo_paquete: paqueteUpdateDTO.codigo_paquete?.toUpperCase(),
-                precio_paquete: precioWhitDicount,
             },
         });
-
-        if (serviciosCodes) {
-            const { ok } = await setPaqueteServicios(paqueteUpdated.codigo_paquete, serviciosCodes);
-            if (!ok) throw CustomError.internalServer(`Error al crear la relacion de paquetes y servicios`);
-
-        };
 
         return {
             ok: true,

@@ -5,16 +5,17 @@ interface PaqueteData {
 export interface PaqueteDTO {
     codigo_paquete: string;
     nombre: string;
-    serviciosCodes: string[]
+    serviciosCodes: string[];
+    imagen?: string;
 };
 
-export interface PaqueteUpdateDTO extends Partial<PaqueteDTO> {
+export interface PaqueteUpdateDTO extends Partial<Omit<PaqueteDTO, "codigo_paquete" | "serviciosCodes">> {
     id: string;
 }
 
 const create = ({ paqueteData }: PaqueteData): [string?, PaqueteDTO?] => {
 
-    const { codigo_paquete, nombre, serviciosCodes } = paqueteData;
+    const { codigo_paquete, nombre, serviciosCodes, imagen } = paqueteData;
 
     if (!codigo_paquete) return ['Missing codigo_paquete'];
     if (!nombre) return ['Missing nombre'];
@@ -31,32 +32,20 @@ const create = ({ paqueteData }: PaqueteData): [string?, PaqueteDTO?] => {
         codigo_paquete,
         nombre,
         serviciosCodes,
+        imagen,
     }];
     
 };
 
 const update = ({ paqueteData }: PaqueteData): [string?, PaqueteUpdateDTO?] => {
 
-    const { codigo_paquete, nombre,  serviciosCodes, id } = paqueteData;
-
+    const {  nombre, imagen, id } = paqueteData;
 
     if (!id) return ['Missing id'];
-    if (serviciosCodes) {
-        if (!Array.isArray(serviciosCodes)) return ['serviciosCodes debe ser un array de codigos de servicio'];
-        if (serviciosCodes.length < 2) return ['serviciosCodes debe contener 2 o mas codigos de servicio'];
-    
-        const uniqueCodes = new Set(serviciosCodes);
-        if (uniqueCodes.size !== serviciosCodes.length) {
-            return ['serviciosCodes no debe contener códigos duplicados'];
-        }
-
-    }
-
     return [undefined, {
         id,
-        codigo_paquete,
         nombre,
-        serviciosCodes
+        imagen,
     }];
     
 };

@@ -9,8 +9,17 @@ const readInfo = (req: Request, res: Response) => {
         .catch((error) => handleError(error, res));
 
 };
+const readInfoDashboardAdmin = (req: Request, res: Response) => {
+
+    InfoService.readInfoDashboardAdmin()
+        .then(resp =>   res.status(200).json(resp))
+        .catch((error) => handleError(error, res));
+
+};
 
 
 export const InfoController = {
     readInfo,
+    readInfoDashboardAdmin,
+
 };

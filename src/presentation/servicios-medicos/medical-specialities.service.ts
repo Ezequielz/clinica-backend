@@ -95,13 +95,13 @@ const updateMedicalSpeciality = async ( medicalSpecialityDTO: MedicalSpecialityU
             },
             data: medicalSpecialityDTO
         });
-
         return {
             ok: true,
             medicalSpecialityUpdated
         };
 
     } catch (error) {
+        console.log(error)
         return {
             ok: false,
             msg: 'Error al crear actualizar el servicio médico'

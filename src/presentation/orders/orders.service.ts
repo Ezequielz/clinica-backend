@@ -89,6 +89,7 @@ const readOrderById = async (id: string) => {
                     }
                 },
 
+
             }
         });
 
@@ -177,13 +178,13 @@ const readGanancias = async (gananciasDTO: GananciasDTO) => {
 
 
 const updateOrder = async (orderUpdateDto: OrderUpdateDTO) => {
-    console.log({ orderUpdateDto })
+
     const order = await prisma.order.findUnique({ where: { id: orderUpdateDto.id } });
     if (!order) throw CustomError.badRequest('Invalid Order Id');
 
-    let pagadoAt;
+    let pagadoAt: Date | null = null; 
     if (orderUpdateDto.pagado) {
-        pagadoAt = new Date()
+        pagadoAt = new Date();
     }
 
     try {

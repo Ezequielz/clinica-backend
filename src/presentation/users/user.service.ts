@@ -137,7 +137,10 @@ const deleteUser = async (id: string) => {
 
     return {
       ok: true,
-      user
+      user: {
+        id: user.id,
+        nombre: user.nombre + ' ' + user.apellido
+      }
     };
 
   } catch (error: any) {
