@@ -21,9 +21,14 @@ const createMedicalSpeciality = (req: Request, res: Response) => {
 };
 
 const readMedicalSpecialities = (req: Request, res: Response) => {
+    MedicalSpecialitiesService.readMedicalSpecialities()
+        .then(resp => res.status(200).json(resp))
+        .catch((error) => handleError(error, res));
+}
+const readMedicalSpecialityById = (req: Request, res: Response) => {
     const { id } = req.params;
 
-    MedicalSpecialitiesService.readMedicalSpecialities(id)
+    MedicalSpecialitiesService.readMedicalSpecialityById(id)
         .then(resp => res.status(200).json(resp))
         .catch((error) => handleError(error, res));
 }
@@ -63,6 +68,7 @@ const deleteMedicalSpeciality = (req: Request, res: Response) => {
 
 export const MedicalSpecialitiesController = {
     createMedicalSpeciality,
+    readMedicalSpecialityById,
     readMedicalSpecialities,
     updateMedicalSpeciality,
     deleteMedicalSpeciality,

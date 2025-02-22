@@ -309,6 +309,7 @@ const readConsultaById = async (id: string) => {
                 },
                 order: {
                     select: {
+                        id: true,
                         pagado: true,
                     }
                 }

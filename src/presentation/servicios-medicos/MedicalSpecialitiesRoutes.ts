@@ -9,6 +9,7 @@ export const MedicalSpecialitiesRoutes = (): Router => {
     const { 
         createMedicalSpeciality,
         readMedicalSpecialities,
+        readMedicalSpecialityById,
         updateMedicalSpeciality,
         deleteMedicalSpeciality,
     } = MedicalSpecialitiesController;
@@ -24,7 +25,7 @@ export const MedicalSpecialitiesRoutes = (): Router => {
     router.post('/', [validateJWT, validateAdmin], createMedicalSpeciality);
 
     router.get('/', readMedicalSpecialities);
-    router.get('/:id', readMedicalSpecialities);
+    router.get('/:id', readMedicalSpecialityById);
 
     router.patch('/:id', [validateJWT, validateAdmin], updateMedicalSpeciality);
     router.delete('/:id', [validateJWT, validateAdmin], deleteMedicalSpeciality);

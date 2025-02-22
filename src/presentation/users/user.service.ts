@@ -3,17 +3,27 @@ import { bcryptAdapter } from '../../config/bcrypt.adapter';
 import { type UserUpdateDTO } from '../../domain/dtos/auth/user.dto';
 
 
-const readUsers = async () => {
+const readUsers = async (params?: Record<string, any> ) => {
+
+  const filters: any = {};
+
+  if (params?.["only-users"] === "true") {
+    filters.medico = null;
+  }
 
   try {
     const users = await prisma.user.findMany(
       {
+        where: {
+          medico: filters.medico 
+        },
         omit: {
           password: true,
           createdAt: true,
           updatedAt: true,
         },
-      }
+      },
+
     );
 
     return {
@@ -36,9 +46,18 @@ const readUsers = async () => {
 const readUserById = async (id: string) => {
 
   try {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.user.findFirst({
       where: {
-        id
+        OR: [
+          {
+            id
+          },
+          {
+            paciente: {
+              id_paciente: id
+            }
+          }
+        ]
       },
       omit: {
         password: true,

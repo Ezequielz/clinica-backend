@@ -5,7 +5,8 @@ import { CustomError } from '../helpers/custom.error';
 import { userDto } from '../../domain/dtos/auth/user.dto';
 
 const readUsers = (req: Request, res: Response) => {
-    UsersService.readUsers()
+    const queryParams = req.query; 
+    UsersService.readUsers(queryParams)
         .then(resp => res.status(200).json(resp))
         .catch((error) => handleError(error, res));
 };

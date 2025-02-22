@@ -587,7 +587,7 @@ export const seed: InitialSeed = {
       especialidadId: "4",
       turnos: [
         { dia_semana: "Martes", hora_inicio: "10:00", hora_fin: "15:00" },
-        { dia_semana: "Miércoles", hora_inicio: "8:00", hora_fin: "18:00" },
+        { dia_semana: "Miércoles", hora_inicio: "08:00", hora_fin: "18:00" },
       ],
     },
     {
@@ -602,7 +602,7 @@ export const seed: InitialSeed = {
       sueldo: 42000,
       especialidadId: "14",
       turnos: [
-        { dia_semana: "Martes", hora_inicio: "8:00", hora_fin: "12:00" },
+        { dia_semana: "Martes", hora_inicio: "08:00", hora_fin: "12:00" },
 
       ],
     },
@@ -618,7 +618,7 @@ export const seed: InitialSeed = {
       sueldo: 42000,
       especialidadId: "13",
       turnos: [
-        { dia_semana: "Viernes", hora_inicio: "8:00", hora_fin: "12:00" },
+        { dia_semana: "Viernes", hora_inicio: "08:00", hora_fin: "12:00" },
 
       ],
     },
@@ -626,9 +626,9 @@ export const seed: InitialSeed = {
       sueldo: 72000,
       especialidadId: "6",
       turnos: [
-        { dia_semana: "Lunes", hora_inicio: "8:00", hora_fin: "15:00" },
-        { dia_semana: "Martes", hora_inicio: "8:00", hora_fin: "12:00" },
-        { dia_semana: "Viernes", hora_inicio: "8:00", hora_fin: "14:00" },
+        { dia_semana: "Lunes", hora_inicio: "08:00", hora_fin: "15:00" },
+        { dia_semana: "Martes", hora_inicio: "08:00", hora_fin: "12:00" },
+        { dia_semana: "Viernes", hora_inicio: "08:00", hora_fin: "14:00" },
 
       ],
     },
@@ -636,9 +636,9 @@ export const seed: InitialSeed = {
       sueldo: 72000,
       especialidadId: "8",
       turnos: [
-        { dia_semana: "Lunes", hora_inicio: "8:00", hora_fin: "15:00" },
-        { dia_semana: "Martes", hora_inicio: "8:00", hora_fin: "12:00" },
-        { dia_semana: "Viernes", hora_inicio: "8:00", hora_fin: "14:00" },
+        { dia_semana: "Lunes", hora_inicio: "08:00", hora_fin: "15:00" },
+        { dia_semana: "Martes", hora_inicio: "08:00", hora_fin: "12:00" },
+        { dia_semana: "Viernes", hora_inicio: "08:00", hora_fin: "14:00" },
 
       ],
     },
@@ -646,9 +646,9 @@ export const seed: InitialSeed = {
       sueldo: 72000,
       especialidadId: "17",
       turnos: [
-        { dia_semana: "Lunes", hora_inicio: "8:00", hora_fin: "15:00" },
-        { dia_semana: "Martes", hora_inicio: "8:00", hora_fin: "12:00" },
-        { dia_semana: "Viernes", hora_inicio: "8:00", hora_fin: "14:00" },
+        { dia_semana: "Lunes", hora_inicio: "08:00", hora_fin: "15:00" },
+        { dia_semana: "Martes", hora_inicio: "08:00", hora_fin: "12:00" },
+        { dia_semana: "Viernes", hora_inicio: "08:00", hora_fin: "14:00" },
 
       ],
     },
@@ -656,8 +656,8 @@ export const seed: InitialSeed = {
       sueldo: 53000,
       especialidadId: "7",
       turnos: [
-        { dia_semana: "Miércoles", hora_inicio: "8:00", hora_fin: "12:00" },
-        { dia_semana: "Jueves", hora_inicio: "8:00", hora_fin: "16:00" },
+        { dia_semana: "Miércoles", hora_inicio: "08:00", hora_fin: "12:00" },
+        { dia_semana: "Jueves", hora_inicio: "08:00", hora_fin: "16:00" },
       ],
     },
     {
@@ -665,7 +665,7 @@ export const seed: InitialSeed = {
       especialidadId: "12",
       turnos: [
         { dia_semana: "Miércoles", hora_inicio: "10:00", hora_fin: "14:00" },
-        { dia_semana: "Viernes", hora_inicio: "9:00", hora_fin: "12:00" },
+        { dia_semana: "Viernes", hora_inicio: "09:00", hora_fin: "12:00" },
       ],
     },
     {
@@ -673,7 +673,7 @@ export const seed: InitialSeed = {
       especialidadId: "8",
       turnos: [
         { dia_semana: "Miércoles", hora_inicio: "12:00", hora_fin: "18:00" },
-        { dia_semana: "Viernes", hora_inicio: "8:00", hora_fin: "12:00" },
+        { dia_semana: "Viernes", hora_inicio: "08:00", hora_fin: "12:00" },
       ],
     },
     {
@@ -681,7 +681,7 @@ export const seed: InitialSeed = {
       especialidadId: "11",
       turnos: [
         { dia_semana: "Miércoles", hora_inicio: "10:00", hora_fin: "18:00" },
-        { dia_semana: "Viernes", hora_inicio: "8:00", hora_fin: "12:00" },
+        { dia_semana: "Viernes", hora_inicio: "08:00", hora_fin: "12:00" },
       ],
     },
     {
@@ -689,7 +689,7 @@ export const seed: InitialSeed = {
       especialidadId: "5",
       turnos: [
         { dia_semana: "Miércoles", hora_inicio: "12:00", hora_fin: "18:00" },
-        { dia_semana: "Viernes", hora_inicio: "8:00", hora_fin: "12:00" },
+        { dia_semana: "Viernes", hora_inicio: "08:00", hora_fin: "12:00" },
       ],
     },
     {
@@ -697,29 +697,29 @@ export const seed: InitialSeed = {
       especialidadId: "8",
       turnos: [
         { dia_semana: "Miércoles", hora_inicio: "12:00", hora_fin: "18:00" },
-        { dia_semana: "Viernes", hora_inicio: "8:00", hora_fin: "12:00" },
+        { dia_semana: "Viernes", hora_inicio: "08:00", hora_fin: "12:00" },
       ],
     },
     {
       sueldo: 47000,
       especialidadId: "5",
       turnos: [
-        { dia_semana: "Martes", hora_inicio: "8:00", hora_fin: "12:00" },
-        { dia_semana: "Miércoles", hora_inicio: "8:00", hora_fin: "12:00" },
+        { dia_semana: "Martes", hora_inicio: "08:00", hora_fin: "12:00" },
+        { dia_semana: "Miércoles", hora_inicio: "08:00", hora_fin: "12:00" },
       ],
     },
     {
       sueldo: 48000,
       especialidadId: "9",
       turnos: [
-        { dia_semana: "Jueves", hora_inicio: "8:00", hora_fin: "15:00" },
+        { dia_semana: "Jueves", hora_inicio: "08:00", hora_fin: "15:00" },
       ],
     },
     {
       sueldo: 48000,
       especialidadId: "7",
       turnos: [
-        { dia_semana: "Jueves", hora_inicio: "8:00", hora_fin: "15:00" },
+        { dia_semana: "Jueves", hora_inicio: "08:00", hora_fin: "15:00" },
       ],
     },
     {

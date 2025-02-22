@@ -7,6 +7,8 @@ import type { MedicoDTO, MedicoUpdateDTO } from '../../domain/dtos/medico/medico
 
 const createMedico = async (medicoDTO: MedicoDTO) => {
 
+    const { turnos, ...restMedicDto } = medicoDTO
+
     const { ok } = await checkExistCodigo_servicio(medicoDTO.especialidadId);
     if (!ok) throw CustomError.badRequest('Invalid especialidadId');
     // creacion del medico
@@ -16,7 +18,18 @@ const createMedico = async (medicoDTO: MedicoDTO) => {
     try {
 
         const medico = await prisma.medico.create({
-            data: medicoDTO
+            data: {
+                ...restMedicDto,
+                ...(turnos && turnos.length > 0 ? {
+                    turnos: {
+                        create: turnos.map((turno) => ({
+                            dia_semana: turno.dia_semana.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''),
+                            hora_inicio: turno.hora_inicio,
+                            hora_fin: turno.hora_fin,
+                        })),
+                    },
+                } : {}),
+            }
         });
 
         return {
@@ -90,7 +103,6 @@ const readMedicoById = async (id?: string) => {
                 OR: [
                     { userId: id },
                     { id_medico: id },
-
                 ]
             },
             omit: {
@@ -100,12 +112,20 @@ const readMedicoById = async (id?: string) => {
             include: {
                 especialidad: {
                     select: {
-                        nombre: true
+                        nombre: true,
+                        codigo_servicio: true,
                     }
                 },
                 turnos: {
                     omit: {
                         medicoId: true
+                    }
+                },
+                user: {
+                    select: {
+                        nombre: true,
+                        apellido: true,
+                        imagen: true,
                     }
                 }
             }
@@ -139,18 +159,63 @@ const readMedicoById = async (id?: string) => {
 
 const updateMedico = async (medicoDTO: MedicoUpdateDTO) => {
 
-    const { id, userId, ...rest } = medicoDTO;
+    const { id, turnos, ...rest } = medicoDTO;
 
     const { medico } = await readMedicoById(id);
     if (!medico) throw CustomError.badRequest('No se encontro médico con ese id');
 
     try {
 
+        if (turnos) {
+            const days = turnos.map(t => t.dia_semana);
+            for (let i = 0; i < days.length; i++) {
+                if (days.indexOf(days[i]) !== i) {
+                    return {
+                        ok: false,
+                        msg: `El día ${days[i]} está repetido`,
+                    };
+                }
+            }
+
+            const turnosMedic = await prisma.turno.findMany({
+                where: { medicoId: medico.id_medico },
+                select: { id_turno: true, dia_semana: true }
+            });
+
+            const turnosAEliminar = turnosMedic
+                .filter(t => !turnos.some(nt => nt.id_turno === t.id_turno))
+                .map(t => t.id_turno);
+
+
+            const turnosANuevos = turnos
+                .filter(t => !turnosMedic.some(tm => tm.dia_semana === t.dia_semana))
+                .map(t => ({
+                    dia_semana: t.dia_semana.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''),
+                    hora_inicio: t.hora_inicio,
+                    hora_fin: t.hora_fin,
+                    medicoId: medico.id_medico
+                }));
+
+            if (turnosAEliminar.length > 0) {
+                await prisma.turno.deleteMany({
+                    where: { id_turno: { in: turnosAEliminar } }
+                });
+            }
+
+
+            if (turnosANuevos.length > 0) {
+                await prisma.turno.createMany({
+                    data: turnosANuevos
+                });
+            }
+
+        }
+
         const updatedMedico = await prisma.medico.update({
             where: {
                 id_medico: medico.id_medico
             },
-            data: { ...rest }
+            data: rest
         });
 
         return {

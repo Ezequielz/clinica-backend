@@ -31,7 +31,7 @@ const createMedicalSpeciality = async ( medicalSpecialityDTO: MedicalSpecialityD
 
 };
 
-const readMedicalSpecialities = async (id?: string) => {
+const readMedicalSpecialityById = async (id?: string) => {
 
     if (id) {
         const isValidId = await checkExistCodigo_servicio(id);
@@ -39,10 +39,64 @@ const readMedicalSpecialities = async (id?: string) => {
     }
 
     try {
-        const servicios = await prisma.servicio.findMany({
+        const servicio = await prisma.servicio.findFirst({
             where: {
-                codigo_servicio: id
+                OR:[
+                    {
+                      id
+                    },
+                    {
+                        codigo_servicio: id
+                    }
+                  
+                  ]
             },
+            include: {
+                Consulta: true,
+                medicos: {
+
+                  select: {
+                    id_medico: true,
+                    user: {
+                        select: {
+                            nombre: true,
+                            apellido: true,
+                        }
+                    },
+                    turnos: true
+                  }
+
+                 
+                }
+            },
+            omit:{
+                updatedAt:true,
+                createdAt: true
+            }
+            
+        });
+
+        return {
+            ok: true,
+            servicio
+        };
+
+    } catch (error) {
+
+        console.log(error);
+        return {
+            ok: false,
+            msg: 'Error al obtener los servicios médicos'
+        }
+    }
+
+}
+const readMedicalSpecialities = async () => {
+
+
+    try {
+        const servicios = await prisma.servicio.findMany({
+          
             include: {
                 Consulta: true,
                 medicos: {
@@ -138,5 +192,6 @@ export const MedicalSpecialitiesService = {
     readMedicalSpecialities,
     updateMedicalSpeciality,
     deleteMedicalSpeciality,
+    readMedicalSpecialityById,
 
 }

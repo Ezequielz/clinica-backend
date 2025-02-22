@@ -1,3 +1,4 @@
+import { Turno } from "@prisma/client";
 
 interface MedicoData {
     medicoData: { [key: string]: any };
@@ -7,16 +8,16 @@ export interface MedicoDTO {
     userId: string;
     sueldo: number;
     especialidadId: string;
+    turnos?: Turno[]
 };
 
-export interface MedicoUpdateDTO extends Partial<MedicoDTO> {
+export interface MedicoUpdateDTO extends Partial<Omit<MedicoDTO, "userId">> {
     id: string;
-};
-
+}
 
 const create = ({ medicoData }: MedicoData): [string?, MedicoDTO?] => {
 
-    const { userId, sueldo, especialidadId } = medicoData;
+    const { userId, sueldo, especialidadId, turnos } = medicoData;
 
     if (!userId) return ['Missing userId'];
     if (!sueldo) return ['Missing sueldo'];
@@ -24,23 +25,24 @@ const create = ({ medicoData }: MedicoData): [string?, MedicoDTO?] => {
 
     return [undefined, {
         userId,
-        sueldo,
+        sueldo: +sueldo,
         especialidadId,
+        turnos
     }];
     
 };
 
 const update = ({ medicoData }: MedicoData): [string?, MedicoUpdateDTO?] => {
 
-    const { userId, sueldo, especialidadId, id } = medicoData;
+    const { sueldo, especialidadId, turnos, id } = medicoData;
 
     if (!id) return ['Missing id'];
 
     return [undefined, {
         id,
-        userId,
-        sueldo,
+        sueldo: +sueldo,
         especialidadId,
+        turnos,
     }];
     
 };
