@@ -3,7 +3,7 @@ import { handleError } from '../helpers/handleError';
 import { CustomError } from '../helpers/custom.error';
 import { OrdersService } from './orders.service';
 import { orderDto } from '../../domain/dtos/order/order.dto';
-import { gananciasDto } from '../../domain/dtos/consulta/ganancia.dto';
+import { gananciasDto } from '../../domain/dtos/order/ganancia.dto';
 
 
 // const createOrder =  (req: Request, res: Response) => {

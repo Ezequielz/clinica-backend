@@ -152,7 +152,7 @@ const generatePDF = async (id: string) => {
 
         const logoPath = path.join(__dirname, "../../../../public/logo.png");
         doc.image(logoPath, 330, -30, { width: 300, align: 'center' });
-        doc.fontSize(30).text("TodoClínica S.A.", 40, 80, { align: "left" });
+        doc.fontSize(30).text("TodoClínica", 40, 80, { align: "left" });
 
         // doc.moveTo(40, 115).lineTo(570, 115).stroke();
         // **Encabezado**
@@ -165,7 +165,7 @@ const generatePDF = async (id: string) => {
 
         // Datos de la orden y paciente
         doc.fontSize(12).text(`Factura N°: ${id}`);
-        doc.fontSize(10).text(`Fecha de facturación: ${new Date().toLocaleDateString()}`).moveDown();
+        doc.fontSize(10).text(`Fecha de facturación: ${new Date(order.pagadoAt!).toLocaleDateString()}`).moveDown();
         doc.fontSize(12).text(`Paciente: ${order.paciente.user.nombre} ${order.paciente.user.apellido}`);
         doc.fontSize(10).text(`Email: ${order.paciente.user.email}`);
         doc.fontSize(10).text(`telefono: ${order.paciente.user.telefono}`);
