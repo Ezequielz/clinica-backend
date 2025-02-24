@@ -1,6 +1,7 @@
 import prisma from '../../lib/prisma';
 import { bcryptAdapter } from '../../config/bcrypt.adapter';
 import { type UserUpdateDTO } from '../../domain/dtos/auth/user.dto';
+import { checkIsDefaultAdminOrUser } from '../helpers/checkIsDefaultAdminOrUser';
 
 
 const readUsers = async (params?: Record<string, any> ) => {
@@ -95,10 +96,19 @@ const readUserById = async (id: string) => {
 
 
 const updateUser = async (userUpdateDTO: UserUpdateDTO) => {
-  const { id, password, fecha_nac, obra_social, ...rest } = userUpdateDTO;
+  const { id, password, fecha_nac, obra_social, rol, ...rest } = userUpdateDTO;
 
+  const {ok} = await checkIsDefaultAdminOrUser(id);
 
-  const hashedPassword = password ? await bcryptAdapter.hash(password) : undefined;
+  if (ok && (password || rol)) {
+    return {
+      ok: false,
+      error: 'default-user',
+      msg: 'No se puede modificar el rol ni la contraseña de este usuario.',
+    };
+  }
+
+  const hashedPassword = !ok && password ? await bcryptAdapter.hash(password) : undefined;
   const fechaToDate = fecha_nac ? new Date(fecha_nac) : undefined
 
   try {
@@ -112,8 +122,9 @@ const updateUser = async (userUpdateDTO: UserUpdateDTO) => {
         where: { id },
         data: {
           ...rest,
-          ...(hashedPassword && { password: hashedPassword }),
           ...(fechaToDate && { fecha_nac: fechaToDate }),
+          ...(!ok && hashedPassword && { password: hashedPassword }), // Evitar cambio de password si es default
+          ...(!ok && rol && { rol }), // Evitar cambio de rol si es default
         },
       });
 

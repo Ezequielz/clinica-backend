@@ -5,7 +5,7 @@ import { CustomError } from '../helpers/custom.error';
 import { userDto } from '../../domain/dtos/auth/user.dto';
 
 const readUsers = (req: Request, res: Response) => {
-    const queryParams = req.query; 
+    const queryParams = req.query;
     UsersService.readUsers(queryParams)
         .then(resp => res.status(200).json(resp))
         .catch((error) => handleError(error, res));
@@ -27,7 +27,7 @@ const readUserById = (req: Request, res: Response) => {
 const updateUser = (req: Request, res: Response) => {
     const { id } = req.params;
     const body = req.body
- 
+
     const [error, user] = userDto.update({ userData: { id, ...body } });
 
     if (error) {
@@ -39,7 +39,7 @@ const updateUser = (req: Request, res: Response) => {
 
     UsersService.updateUser(user!)
         .then(resp => {
-
+            if (resp.error === 'default-user') throw CustomError.badRequest(resp.msg);
             if (!resp.user) throw CustomError.notFound('No se encontro usario con ese id');
             res.status(200).json(resp);
 

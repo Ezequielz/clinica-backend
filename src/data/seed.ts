@@ -76,6 +76,13 @@ async function main() {
 
     if (services.length >= 2) {
         const quantityPacks = 5
+        const imagesToPaquete= [
+            'https://res.cloudinary.com/zapataezequiel/image/upload/v1740428831/clinica/paquete-1.webp',
+            'https://res.cloudinary.com/zapataezequiel/image/upload/v1740428832/clinica/paquete-2.webp',
+            'https://res.cloudinary.com/zapataezequiel/image/upload/v1740428831/clinica/paquete-3.webp',
+            'https://res.cloudinary.com/zapataezequiel/image/upload/v1740428831/clinica/paquete-4.webp',
+            'https://res.cloudinary.com/zapataezequiel/image/upload/v1740428831/clinica/paquete-5.webp',
+        ]
 
         for (let i = 1; i <= quantityPacks; i++) {
 
@@ -92,12 +99,12 @@ async function main() {
             // codigo random del paquete
             const codigo_paquete = `PACK${String(i).padStart(3, '0')}`
 
-
-            // Crear un paquete
+     
             const paquete = await prisma.paquete.create({
                 data: {
                     codigo_paquete,
                     nombre: `Paquete Especial ${i}`,
+                    imagen: imagesToPaquete.at(i -1),
                     precio_paquete
                 },
             });
